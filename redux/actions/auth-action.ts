@@ -6,7 +6,7 @@ import {
   LOGOUT,
 } from '@constants/action-types';
 import { hideLoader } from './loader-action';
-import { loginService, logoutService } from '@services/auth-service';
+import { loginService, logoutService } from '@services/auth.service';
 import { AppDispatch } from '../store/store';
 
 export const login =
