@@ -1,6 +1,10 @@
 import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT } from '@constants/action-types';
 
-const user = JSON.parse(localStorage.getItem('user') as any);
+let user;
+
+if (typeof window !== 'undefined') {
+  user = JSON.parse(localStorage.getItem('user') as any);
+}
 
 const initialState = user
   ? { isLoggedIn: true, user }

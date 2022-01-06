@@ -1,3 +1,4 @@
+import { GuestLayout } from '@components/layouts/guest-layout';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -10,7 +11,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <button className="btn btn-primary">Hello</button>
+      <GuestLayout>
+        <button className="btn btn-primary">Hello</button>
+      </GuestLayout>
     </>
   );
 };

@@ -1,17 +1,13 @@
-import { CLEAR_MESSAGE, SET_MESSAGE } from '@constants/action-types';
+import { TOGGLE_SIDEBAR } from '@constants/action-types';
 
 const initialState = {
-  message: '',
+  open: true,
 };
 
-export default function messageReducer(state = initialState, action: any) {
-  const { type, payload } = action;
-
-  switch (type) {
-    case SET_MESSAGE:
-      return { message: payload };
-    case CLEAR_MESSAGE:
-      return { message: '' };
+export default function sidebarReducer(state = initialState, action: any) {
+  switch (action.type) {
+    case TOGGLE_SIDEBAR:
+      return { open: action.open };
     default:
       return state;
   }

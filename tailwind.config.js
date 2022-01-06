@@ -11,19 +11,6 @@ module.exports = {
       lg: '976px',
       xl: '1440px',
     },
-    colors: {
-      primary: {
-        light: '#fdffb7',
-        DEFAULT: '#fafc80',
-        dark: '#c8c988',
-      },
-      secondary: {
-        light: '#E4E6EB',
-        DEFAULT: '#474747',
-        dark: '#383838',
-      },
-      error: '#fe0000',
-    },
     extend: {
       spacing: {
         128: '32rem',
@@ -31,6 +18,35 @@ module.exports = {
       },
       borderRadius: {
         '4xl': '2rem',
+      },
+      colors: {
+        secondary: {
+          light: '#fdffb7',
+          DEFAULT: '#fafc80',
+          dark: '#c8c988',
+        },
+        primary: {
+          light: '#E4E6EB',
+          DEFAULT: '#474747',
+          dark: '#383838',
+        },
+        error: '#fe0000',
+        info: {
+          DEFAULT: '#E1EFFE',
+          dark: '#3F83F8',
+        },
+        success: {
+          DEFAULT: '#DEF7EC',
+          dark: '#3C7B62',
+        },
+        warning: {
+          DEFAULT: '#ffd2b7',
+          dark: '#ff9900',
+        },
+        danger: {
+          DEFAULT: '#ffdedd',
+          dark: '#ff5724',
+        },
       },
     },
   },
@@ -58,8 +74,8 @@ module.exports = {
           secondary: '#fafc80',
           'secondary-focus': '#c8c988',
           'secondary-content': '#ffffff',
-          accent: '#474747',
-          'accent-focus': '#383838',
+          accent: '#37cdbe',
+          'accent-focus': '#2aa79b',
           'accent-content': '#ffffff',
           neutral: '#3d4451',
           'neutral-focus': '#2a2e37',
@@ -68,8 +84,8 @@ module.exports = {
           'base-200': '#f9fafb',
           'base-300': '#d1d5db',
           'base-content': '#1f2937',
-          info: '#2094f3',
-          success: '#009485',
+          info: '#3F83F8',
+          success: '#3C7B62',
           warning: '#ff9900',
           error: '#ff5724',
         },

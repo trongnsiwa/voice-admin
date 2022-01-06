@@ -9,7 +9,7 @@ import { hideLoader } from './loader-action';
 import { loginService, logoutService } from '@services/auth.service';
 import { AppDispatch } from '../store/store';
 
-export const login =
+export const loginAction =
   (username: string, password: string) => (dispatch: AppDispatch) => {
     return loginService(username, password).then(
       (data) => {
@@ -50,7 +50,7 @@ export const login =
     );
   };
 
-export const logout = () => (dispatch: AppDispatch) => {
+export const logoutAction = () => (dispatch: AppDispatch) => {
   logoutService();
 
   dispatch({
