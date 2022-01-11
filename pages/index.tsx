@@ -1,8 +1,15 @@
-import { GuestLayout } from '@components/layouts/guest-layout';
+import { useAppSelector } from '@redux/store/hooks';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Login from './login';
 
 const Home: NextPage = () => {
+  const { user } = useAppSelector((state) => state.auth);
+
+  if (!user || user.isLoggedIn === false) {
+    return <Login />;
+  }
+
   return (
     <>
       <Head>
@@ -11,9 +18,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GuestLayout>
-        <button className="btn btn-primary">Hello</button>
-      </GuestLayout>
+      <button className="btn btn-primary">Hello</button>
     </>
   );
 };

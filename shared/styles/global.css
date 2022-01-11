@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+input[type='password']::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 html,
 body {
   font-family: 'Inter', sans-serif;

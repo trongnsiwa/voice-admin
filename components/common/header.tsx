@@ -1,23 +1,22 @@
 import { logoutAction } from '@redux/actions/auth-action';
 import { useAppDispatch, useAppSelector } from '@redux/store/hooks';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { RiMenu2Line } from 'react-icons/ri';
 import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
-import { useOnClickOutside } from 'usehooks-ts';
+import { useBoolean, useOnClickOutside } from 'usehooks-ts';
 
 const Header = () => {
   // states
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const { value, setFalse, toggle } = useBoolean(false);
 
   // ref
   const menuRef = useRef(null);
 
   // selectors
-  const { user: currentUser } = useAppSelector((state) => state.auth);
   const { open } = useAppSelector((state) => state.sidebar);
 
   // dispatch
@@ -33,7 +32,7 @@ const Header = () => {
     console.log('hi');
   };
 
-  useOnClickOutside(menuRef, () => setIsOpenMenu(false));
+  useOnClickOutside(menuRef, setFalse);
 
   return (
     <>
@@ -49,11 +48,7 @@ const Header = () => {
           </button>
         </div>
         <div className="flex-none relative">
-          <div
-            className="avatar cursor-pointer"
-            onClick={() => setIsOpenMenu(!isOpenMenu)}
-            ref={menuRef}
-          >
+          <div className="avatar cursor-pointer" onClick={toggle} ref={menuRef}>
             <div className="rounded-full w-10 h-10 m-1">
               <img
                 src="https://ik.imagekit.io/tnyyngwxvx9/default_28FGC8ZwZ.png"
@@ -62,7 +57,7 @@ const Header = () => {
             </div>
           </div>
           <motion.ul
-            animate={isOpenMenu ? 'open' : 'closed'}
+            animate={value ? 'open' : 'closed'}
             variants={{
               closed: { opacity: 0, y: '-10%' },
               open: {
