@@ -8,6 +8,7 @@ import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { useBoolean, useOnClickOutside } from 'usehooks-ts';
+import { toggleSidebar } from '@redux/actions/sidebar-action';
 
 const Header = () => {
   // states
@@ -36,17 +37,16 @@ const Header = () => {
 
   return (
     <>
-      <div className="navbar mb-2 shadow-lg">
+      <motion.div className="navbar mb-2 shadow-lg">
         <div className="flex-1">
           <input id="drawer" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content">
-            <label
-              htmlFor="drawer"
-              className="btn btn-circle btn-ghost drawer-button"
-            >
-              <RiMenu2Line className="inline-block w-6 h-6" />
-            </label>
-          </div>
+          <label
+            htmlFor="drawer"
+            className="btn btn-circle btn-ghost drawer-button"
+            onClick={() => dispatch(toggleSidebar(!open))}
+          >
+            <RiMenu2Line className="inline-block w-6 h-6" />
+          </label>
         </div>
         <div className="flex-none">
           <button className="btn btn-circle btn-ghost">
@@ -82,7 +82,7 @@ const Header = () => {
             </li>
           </motion.ul>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
