@@ -72,38 +72,61 @@ const Login = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex bg-secondary relative">
+    <div className="w-screen h-screen flex bg-gradient-to-t from-secondary via-white  to-secondary relative">
       <img
-        src="/images/dashboard.png"
+        src="/images/wavy.png"
         alt=""
-        className="hidden md:block absolute w-[30em] h-[30em] lg:w-[35em] lg:h-[35em] xl:w-[40em] xl:h-[40em] bottom-0 left-[15%] xl:left-1/3 xl:-translate-x-1/3"
+        className="hidden md:block absolute w-full h-full bottom-0 scale-x-[-1] overflow-hidden object-cover -left-[30%] lg:left-0 object-right"
       />
-      <img
-        src="/images/message.png"
-        alt=""
-        className="hidden md:block absolute w-[10em] top-[10%] left-[3%] rotate-[330deg]"
-      />
-      <img
-        src="/images/warning.png"
-        alt=""
-        className="hidden md:block absolute w-[10em] top-[2%] left-1/2 -translate-x-[100%] scale-x-[-1] rotate-[270deg]"
-      />
-      <div className="bg-gradient-to-tr from-secondary-light to-secondary h-screen w-1/12 md:w-1/2">
-        <h1 className="hidden md:block absolute top-[25%] left-[7%] font-extrabold text-5xl xl:text-6xl leading-tight">
-          &quot;Tieng noi
-          <br /> Thuong Hieu&quot;
+      <div
+        className="bg-gradient-to-b from-secondary via-white to-secondary
+       h-screen w-1/12 md:w-1/2"
+      >
+        <h1 className="hidden md:block absolute top-[20%] left-[7%] font-extrabold text-3xl lg:text-5xl xl:text-6xl leading-tight text-gray-700">
+          &quot;Vocal
+          <br /> To The Moon&quot;
         </h1>
+        <img
+          src="/images/login-1.jpg"
+          alt=""
+          className="hidden lg:block absolute w-[12em] bottom-[38%] left-[15%] rounded-2xl shadow-primary shadow-xl rotate-12"
+        />
+        <img
+          src="/images/login-2.jpg"
+          alt=""
+          className="hidden lg:block absolute w-[12em] bottom-[20%] left-8 rounded-2xl shadow-primary shadow-xl rotate-[350deg]"
+        />
+        <img
+          src="/images/dashboard.png"
+          alt=""
+          className="hidden md:block absolute w-[20em] h-[20em] lg:w-[35em] lg:h-[35em] xl:w-[40em] xl:h-[40em] bottom-0 left-[5%] xl:left-1/3 xl:-translate-x-1/3 z-[2]"
+        />
+        <img
+          src="/images/message.png"
+          alt=""
+          className="hidden md:block absolute w-[6em] lg:w-[7em] xl:w-[10em] top-[9%] xl:top-[5%] left-[3%] rotate-[330deg]"
+        />
+        <img
+          src="/images/warning.png"
+          alt=""
+          className="hidden lg:block absolute w-[7em] xl:w-[10em] top-[2%] left-1/2 -translate-x-[100%] scale-x-[-1] rotate-[270deg] z-[2]"
+        />
+        <img
+          src="/images/music.png"
+          alt=""
+          className="hidden lg:block absolute w-[5em] top-[15%] left-1/3 xl:left-1/4 rotate-[30deg]"
+        />
       </div>
-      <div className="h-full bg-white shadow-2xl w-11/12 md:w-1/2 rounded-l-[5em]">
+      <div className="h-full bg-white shadow-2xl w-11/12 lg:w-1/2 rounded-l-[5em] z-[1]">
         <div className="mx-auto max-w-md mt-24">
           <div className="flex justify-center flex-col">
             <img
-              className="my-2 mx-auto w-[7em]"
-              src={'/images/logo.png'}
+              className="my-2 mx-auto w-[4em]"
+              src={'/images/radio-waves.png'}
               alt=""
             />
-            <span className="text-xl text-center mt-2 font-bold">
-              Voice Platform Management
+            <span className="text-xl text-center mt-2 font-bold text-gray-800">
+              Vocal Management App
             </span>
           </div>
           <form onSubmit={formik.handleSubmit} className="mt-8">
