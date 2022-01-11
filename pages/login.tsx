@@ -89,7 +89,7 @@ const Login = () => {
         <img
           src="/images/login-1.jpg"
           alt=""
-          className="hidden lg:block absolute w-[12em] bottom-[38%] left-[15%] rounded-2xl shadow-primary shadow-xl rotate-12"
+          className="hidden lg:block absolute w-[12em] bottom-[38%] left-[14%] rounded-2xl shadow-primary shadow-xl rotate-12"
         />
         <img
           src="/images/login-2.jpg"
@@ -130,12 +130,12 @@ const Login = () => {
             </span>
           </div>
           <form onSubmit={formik.handleSubmit} className="mt-8">
-            <p className="font-bold text-lg mb-5">Đăng nhập</p>
+            <p className="font-bold text-lg mb-5">Login</p>
             {message && <p className="error-message mb-2">{message}</p>}
 
             <div className="form-control">
               <label htmlFor="username" className="label">
-                <span className="label-text">Tên tài khoản</span>
+                <span className="label-text">Username</span>
               </label>
               <input
                 type="text"
@@ -159,7 +159,7 @@ const Login = () => {
 
             <div className="form-control mt-3 relative">
               <label htmlFor="password" className="label">
-                <span className="label-text">Mật khẩu</span>
+                <span className="label-text">Password</span>
               </label>
               <input
                 type={value ? 'text' : 'password'}
@@ -177,12 +177,12 @@ const Login = () => {
               <a
                 className={`absolute right-3 ${
                   formik.touched.password && formik.errors.password
-                    ? 'top-[40%]'
+                    ? 'top-[43%]'
                     : 'top-[55%]'
                 } cursor-pointer`}
                 onClick={toggle}
               >
-                Hiện
+                Show
               </a>
               {formik.touched.password && formik.errors.password ? (
                 <div className="text-error text-sm mt-2">
@@ -191,15 +191,15 @@ const Login = () => {
               ) : null}
             </div>
 
-            <a className="flex justify-end text-sm mt-2 link link-primary">
-              Quên mật khẩu?
+            <a className="flex justify-end text-sm mt-2 link link-primary no-underline hover:underline">
+              Forgot password?
             </a>
 
             <button
               type="submit"
               className="w-full mt-14 btn btn-outline btn-primary"
             >
-              Đăng nhập
+              Login
             </button>
           </form>
         </div>

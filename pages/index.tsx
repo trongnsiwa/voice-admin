@@ -1,3 +1,4 @@
+import Layout from '@components/layouts/layout';
 import { useAppSelector } from '@redux/store/hooks';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -6,9 +7,9 @@ import Login from './login';
 const Home: NextPage = () => {
   const { user } = useAppSelector((state) => state.auth);
 
-  if (!user || user.isLoggedIn === false) {
-    return <Login />;
-  }
+  // if (!user || user.isLoggedIn === false) {
+  //   return <Login />;
+  // }
 
   return (
     <>
@@ -18,7 +19,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <button className="btn btn-primary">Hello</button>
+      <Layout>
+        <button className="btn btn-primary">Hello</button>
+      </Layout>
     </>
   );
 };
