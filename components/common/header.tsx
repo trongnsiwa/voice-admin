@@ -6,8 +6,13 @@ import { useRef } from 'react';
 import { RiMenu2Line } from 'react-icons/ri';
 import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { IoLogOutOutline } from 'react-icons/io5';
-import { motion } from 'framer-motion';
-import { useBoolean, useMediaQuery, useOnClickOutside } from 'usehooks-ts';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  useBoolean,
+  useMediaQuery,
+  useOnClickOutside,
+  useWindowSize,
+} from 'usehooks-ts';
 import { toggleSidebar } from '@redux/actions/sidebar-action';
 
 const Header = () => {
@@ -38,7 +43,7 @@ const Header = () => {
   useOnClickOutside(menuRef, setFalse);
 
   return (
-    <>
+    <AnimatePresence initial={false}>
       <div className="navbar mb-2 shadow-lg">
         <div className="flex-1">
           <input
@@ -91,7 +96,7 @@ const Header = () => {
           </motion.ul>
         </div>
       </div>
-    </>
+    </AnimatePresence>
   );
 };
 
