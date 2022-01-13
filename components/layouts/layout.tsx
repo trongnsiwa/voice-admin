@@ -1,9 +1,21 @@
 import Header from '@components/common/header';
 import Sidebar from '@components/common/sidebar';
+import { useAppSelector } from '@redux/store/hooks';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
+  const { user: currentUser } = useAppSelector((state) => state.auth);
+
+  // if (!currentUser) {
+  //   router.push({
+  //     pathname: '/login',
+  //     query: { from: router.asPath },
+  //   });
+  // }
+
   return (
     <>
       <Head>
@@ -16,7 +28,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Sidebar />
         <div className="flex flex-col flex-1 w-full drawer-content">
           <Header />
-          <main className="h-full">{children}</main>
+          <main className="h-full overflow-auto">{children}</main>
         </div>
       </div>
     </>
