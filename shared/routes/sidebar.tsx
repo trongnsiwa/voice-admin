@@ -1,9 +1,6 @@
-import {
-  MdOutlineDashboard,
-  MdWorkOutline,
-  MdOutlineRecordVoiceOver,
-} from 'react-icons/md';
-import { FiUsers } from 'react-icons/fi';
+import { MdDashboard, MdWork, MdRecordVoiceOver } from 'react-icons/md';
+import { HiDocumentReport } from 'react-icons/hi';
+import { FaUserAlt } from 'react-icons/fa';
 
 export interface Bar {
   icon: JSX.Element;
@@ -13,27 +10,27 @@ export interface Bar {
 
 export const sidebars: Bar[] = [
   {
-    icon: <MdOutlineDashboard className="h-6 w-6" />,
+    icon: <MdDashboard className="h-6 w-6" />,
     name: 'Dashboard',
     path: '/',
   },
   {
-    icon: <MdWorkOutline className="h-6 w-6" />,
+    icon: <MdWork className="h-5 w-5" />,
     name: 'Project',
     path: '/project',
   },
   {
-    icon: <FiUsers className="h-6 w-6" />,
+    icon: <FaUserAlt className="h-4 w-4" />,
     name: 'Customer',
     path: '/customer',
   },
   {
-    icon: <MdOutlineRecordVoiceOver className="h-6 w-6" />,
+    icon: <MdRecordVoiceOver className="h-5 w-5" />,
     name: 'Artist',
     path: '/artist',
   },
   {
-    icon: <MdOutlineRecordVoiceOver className="h-6 w-6" />,
+    icon: <HiDocumentReport className="h-5 w-5" />,
     name: 'Report',
     path: '/report',
   },

@@ -20,7 +20,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Layout>
-        <button className="btn btn-primary">Hello</button>
+        <></>
       </Layout>
     </>
   );

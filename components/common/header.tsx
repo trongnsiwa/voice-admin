@@ -7,7 +7,7 @@ import { RiMenu2Line } from 'react-icons/ri';
 import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
-import { useBoolean, useOnClickOutside } from 'usehooks-ts';
+import { useBoolean, useMediaQuery, useOnClickOutside } from 'usehooks-ts';
 import { toggleSidebar } from '@redux/actions/sidebar-action';
 
 const Header = () => {
@@ -26,6 +26,8 @@ const Header = () => {
   // router
   const router = useRouter();
 
+  const matches = useMediaQuery('(min-width: 1440px)');
+
   const logOut = () => {
     // dispatch(logoutAction());
     // router.push('/signin');
@@ -37,12 +39,18 @@ const Header = () => {
 
   return (
     <>
-      <motion.div className="navbar mb-2 shadow-lg">
+      <div className="navbar mb-2 shadow-lg">
         <div className="flex-1">
-          <input id="drawer" type="checkbox" className="drawer-toggle" />
+          <input
+            id="drawer"
+            type="checkbox"
+            className={matches ? 'hidden' : `drawer-toggle matches`}
+          />
           <label
             htmlFor="drawer"
-            className="btn btn-circle btn-ghost drawer-button"
+            className={
+              matches ? 'hidden' : `btn btn-circle btn-ghost drawer-button`
+            }
             onClick={() => dispatch(toggleSidebar(!open))}
           >
             <RiMenu2Line className="inline-block w-6 h-6" />
@@ -82,7 +90,7 @@ const Header = () => {
             </li>
           </motion.ul>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 };
