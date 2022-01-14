@@ -1,20 +1,29 @@
 import Layout from '@components/layouts/layout';
 import SearchBar from '@components/search-bar';
-import Select from '@components/select';
+import MultipleSelect from '@components/multiple-select';
 import { ProjectFilter } from '@services/project.service';
 import { useState } from 'react';
 
 import { BsTags } from 'react-icons/bs';
+import { MdOutlineDateRange } from 'react-icons/md';
+import DatePicker from '@components/date-range-picker';
 
 const Project = () => {
   // data
-  const [statusList, setStatusList] = useState(['abc', 'efg', 'hij']);
+  const [statusList, setStatusList] = useState([
+    'abc',
+    'efg',
+    'hijjjjjjjjjjjjjjjjjjjjjjjjjjjjddddddddddddddddddddddddddd',
+  ]);
+
+  const [selectionRange, setSelectionRange] = useState<DateRangeType>({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   // filter
   const [filter, setFilter] = useState<ProjectFilter>({
     Status: null,
-    PriceMin: null,
-    PriceMax: null,
     CreateDate: null,
   });
   const [sortObj, setSortObj] = useState<any>(null);
@@ -30,34 +39,29 @@ const Project = () => {
     <Layout>
       <div className="pt-10">
         <div className="px-10">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-semibold mb-5">Project</h1>
+          <div className="flex justify-between items-center border-b-2 border-gray-100 mb-5 pb-5">
+            <h1 className="text-2xl font-semibold ">Project</h1>
           </div>
-          <div className="w-full inline-flex gap-3 mb-5">
+          <div className="w-full inline-flex gap-3 border-b-2 border-gray-100 mb-5 pb-5">
             {/* search */}
             <SearchBar setValue={setSearchBy} />
             {/* actions */}
-            <Select
-              icon={<BsTags className="w-6 h-6" />}
-              name="status"
+            {/* create date */}
+            <DatePicker
+              icon={<MdOutlineDateRange className="w-6 h-6 text-gray-500" />}
+              name="Created Date"
+              onChange={null}
+              selectionRange={selectionRange}
+            />
+            {/* status */}
+            <MultipleSelect
+              icon={<BsTags className="w-6 h-6 text-gray-500" />}
+              name="Status"
               data={statusList}
               value={filter.Status}
-              onChange={(e) => {
-                const value = e.target.value;
-
-                if (value.toLowerCase() !== 'all') {
-                  setFilter({
-                    ...filter,
-                    Status: value || null,
-                  });
-                } else {
-                  setFilter({
-                    ...filter,
-                    Status: null,
-                  });
-                }
-              }}
+              onChange={null}
             />
+            {/* age */}
           </div>
         </div>
 

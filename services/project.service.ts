@@ -3,8 +3,6 @@ const API_URL = '/projects';
 
 export interface ProjectFilter {
   Status: string | null;
-  PriceMin: string | null;
-  PriceMax: string | null;
   CreateDate: string | null;
 }
 
@@ -25,16 +23,8 @@ export const getProjects = (
         ? '&sort[CreateDate]=' + sort.CreateDate
         : ''
     }${sort && sort.Status != null ? '&sort[Email]=' + sort.Status : ''}${
-      filter.PriceMin != null && filter.PriceMin !== ''
-        ? '&filter[PriceMin]=' + filter.PriceMin
-        : ''
-    }${
       filter.Status != null && filter.Status !== ''
         ? '&filter[Status]=' + filter.Status
-        : ''
-    }${
-      filter.PriceMax != null && filter.PriceMax !== ''
-        ? '&filter[PriceMax]=' + filter.PriceMax
         : ''
     }${
       filter.CreateDate != null && filter.CreateDate !== ''

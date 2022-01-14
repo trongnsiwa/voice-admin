@@ -2,7 +2,8 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import '@shared/styles/global.css';
 import '@shared/styles/nprocess.css';
-import '@shared/styles/calendar.css';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import { store } from '@redux/store/store';
 import dynamic from 'next/dynamic';
 

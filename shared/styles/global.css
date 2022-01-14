@@ -12,7 +12,22 @@ input[type='password']::-ms-reveal {
 
 html,
 body {
+  padding: 0;
+  margin: 0;
   font-family: 'Inter', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.rdrDefinedRangesWrapper {
+  display: none;
 }
 
 .btn {
@@ -24,9 +39,13 @@ body {
 }
 
 .input {
-  @apply focus:border-2 hover:border-2 focus:border-primary hover:border-primary;
+  @apply focus:border hover:border focus:border-primary hover:border-primary;
 }
 
 .select {
-  @apply focus:border-2 hover:border-2 focus:border-primary hover:border-primary focus:outline-none focus:ring-0;
+  @apply focus:border hover:border focus:border-primary hover:border-primary focus:outline-none focus:ring-0;
+}
+
+.checkbox {
+  @apply focus:border focus:border-primary focus:ring-primary;
 }
