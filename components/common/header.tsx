@@ -44,7 +44,7 @@ const Header = () => {
 
   return (
     <AnimatePresence initial={false}>
-      <div className="navbar mb-2 shadow-lg">
+      <div className="navbar mb-2 shadow-lg px-3">
         <div className="flex-1">
           <input
             id="drawer"

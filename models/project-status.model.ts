@@ -17,16 +17,16 @@ export const projectStatusList: ProjectStatus[] = [
 export const statusColor = (status: string) => {
   switch (status) {
     case 'Waiting':
-      return 'neutral';
+      return 'badge-neutral';
     case 'Pending':
-      return 'warning';
+      return 'badge-warning';
     case 'Done':
-      return 'success';
+      return 'badge-success';
     case 'Delete':
     case 'Deny':
-      return 'error';
+      return 'badge-error';
     default:
-      return 'info';
+      return 'badge-info';
   }
 };
 

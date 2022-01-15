@@ -9,10 +9,14 @@ import { BsTags } from 'react-icons/bs';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { GiAges } from 'react-icons/gi';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
+import { HiOutlinePencilAlt } from 'react-icons/hi';
+
 import Table from '@components/table';
 import { Project, projects } from 'models/project.model';
 import dayjs from 'dayjs';
 import { getLabelByStatus, statusColor } from 'models/project-status.model';
+import { Column } from 'react-table';
+import Link from 'next/link';
 
 const Project = () => {
   // status
@@ -68,42 +72,29 @@ const Project = () => {
 
   // search
   const [searchBy, setSearchBy] = useState('');
-  const [page, setPage] = useState<SearchType>({
-    no: 1,
-    size: 30,
-  });
+  const [totalResults, setTotalResults] = useState(0);
 
   // table
   const [data, setData] = useState(projects);
-  const columns = useMemo(
+  const columns = useMemo<Column[]>(
     () => [
-      {
-        Header: '',
-        accessor: 'id',
-        Cell: ({ cell: { value } }) => (
-          <th>
-            <label>
-              <input type="checkbox" className="checkbox" />
-            </label>
-          </th>
-        ),
-      },
       {
         Header: 'Customer',
         accessor: 'poster.firstName',
         Cell: ({ cell }) => {
           const { original } = cell.row;
+          const project = original as Project;
 
           return (
             <div className="flex flex-row items-center">
               <div className="avatar hidden mr-3 md:block">
-                <div className="w-10 h-10">
-                  <img src={original.poster.avatar} alt="User image" />
+                <div className="rounded-full w-10 h-10">
+                  <img src={project.poster.avatar} alt="User image" />
                 </div>
               </div>
 
               <div>
-                <p className="text-sm">{`${original.poster.lastName} ${original.poster.firstName}`}</p>
+                <p className="text-sm">{`${project.poster.lastName} ${project.poster.firstName}`}</p>
               </div>
             </div>
           );
@@ -126,14 +117,18 @@ const Project = () => {
         Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
       },
       {
-        Header: 'Min Age',
+        Header: 'Age',
         accessor: 'minAge',
-        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
-      },
-      {
-        Header: 'Max Age',
-        accessor: 'maxAge',
-        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
+        Cell: ({ cell }) => {
+          const { original } = cell.row;
+          const project = original as Project;
+
+          return (
+            <span className="text-sm ">
+              {project.minAge} - {project.maxAge}
+            </span>
+          );
+        },
       },
       {
         Header: 'Price',
@@ -180,9 +175,21 @@ const Project = () => {
         Header: 'Status',
         accessor: 'status',
         Cell: ({ cell: { value } }) => (
-          <div className={`badge badge-${statusColor(value)}`}>
+          <div className={`badge ${statusColor(value)} text-sm`}>
             {getLabelByStatus(value)}
           </div>
+        ),
+      },
+      {
+        Header: 'Action',
+        accessor: 'id',
+        Cell: ({ cell: { value } }) => (
+          <Link href={`/project/${value}`} passHref>
+            <HiOutlinePencilAlt
+              className="w-6 h-6 cursor-pointer text-gray-600"
+              title="View Detail"
+            />
+          </Link>
         ),
       },
     ],
@@ -239,7 +246,7 @@ const Project = () => {
 
         <div className="border-t-2 border-gray-100">
           {/* table */}
-          <Table columns={columns} data={data} />
+          <Table columns={columns} data={data} total={totalResults} />
         </div>
       </div>
     </Layout>
