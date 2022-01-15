@@ -21,7 +21,7 @@ const DatePicker = ({
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
-      <Popover.Button className="pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent">
+      <Popover.Button className="pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent w-[15em]">
         <span className="my-auto text-gray-600 font-medium whitespace-nowrap">
           {name}
         </span>
@@ -36,7 +36,7 @@ const DatePicker = ({
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute z-10">
+        <Popover.Panel className="absolute z-10 shadow-lg">
           <DateRangePicker ranges={[selectionRange]} onChange={onChange} />
         </Popover.Panel>
       </Transition>

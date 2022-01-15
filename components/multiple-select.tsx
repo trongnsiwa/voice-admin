@@ -4,7 +4,7 @@ import { Fragment, ReactElement } from 'react';
 interface MultipleSelectProps {
   icon: ReactElement;
   name: string;
-  data: string[];
+  data: any[];
   value: string | null;
   onChange: any;
 }
@@ -19,7 +19,7 @@ const MultipleSelect = ({
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
-      <Popover.Button className="pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent w-[17em]">
+      <Popover.Button className="pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent w-[15em]">
         <span className="my-auto text-gray-600 font-medium">{name}</span>
       </Popover.Button>
 
@@ -53,7 +53,7 @@ const MultipleSelect = ({
                   value={item}
                 />
                 <span className="label-text capitalize overflow-hidden text-ellipsis pl-3">
-                  {item}
+                  {item.label}
                 </span>
               </label>
             ))}

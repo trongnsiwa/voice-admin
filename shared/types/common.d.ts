@@ -7,3 +7,20 @@ type DateRangeType = {
   startDate: Date;
   endDate: Date;
 };
+
+type StatusType = {
+  name: string;
+  label: string;
+};
+
+type AgeType = {
+  startAge: number;
+  endDate: number;
+  label: string;
+};
+
+type PriceType = {
+  startPrice: number;
+  endPrice: number;
+  label: string;
+};

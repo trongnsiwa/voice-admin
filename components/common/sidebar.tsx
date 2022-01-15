@@ -27,7 +27,7 @@ const Sidebar = () => {
       {open ? (
         <>
           <motion.div
-            className="drawer-side bg-primary shadow-lg h-screen"
+            className="drawer-side bg-primary shadow-lg h-screen over"
             initial={{ width: '0', x: '-100%' }}
             animate={{
               width: '280px',
@@ -40,7 +40,7 @@ const Sidebar = () => {
             transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
           >
             <ul className="menu p-4 overflow-y-auto text-base-content">
-              <li className="mb-7 pb-3 border-b border-stone-500">
+              <li className="mb-7 pb-3 border-b border-stone-500 w-[280px]">
                 <div className="m-3">
                   <img className="h-14" src="/images/logo.png" alt="" />
                 </div>

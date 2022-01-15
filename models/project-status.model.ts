@@ -5,13 +5,13 @@ export interface ProjectStatus {
 }
 
 export const projectStatusList: ProjectStatus[] = [
-  { code: -1, label: 'Tất cả', name: 'All' },
-  { code: 0, label: 'Đang chỉnh sửa', name: 'Waiting' },
-  { code: 1, label: 'Đang thuê', name: 'Pending' },
-  { code: 2, label: 'Tiến hành', name: 'Process' },
-  { code: 3, label: 'Hoàn tất', name: 'Done' },
-  { code: 4, label: 'Đã hủy', name: 'Delete' },
-  { code: 5, label: 'Từ chối chỉnh sửa', name: 'Deny' },
+  { code: -1, label: 'All', name: 'All' },
+  { code: 0, label: 'Waiting', name: 'Waiting' },
+  { code: 1, label: 'Pending', name: 'Pending' },
+  { code: 2, label: 'In-progress', name: 'Process' },
+  { code: 3, label: 'Done', name: 'Done' },
+  { code: 4, label: 'Deleted', name: 'Delete' },
+  { code: 5, label: 'Denied', name: 'Deny' },
 ];
 
 export const statusColor = (status: string) => {
