@@ -10,27 +10,47 @@ import { MdOutlineDateRange } from 'react-icons/md';
 import { GiAges } from 'react-icons/gi';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import Table from '@components/table';
+import { Project, projects } from 'models/project.model';
+import dayjs from 'dayjs';
+import { getLabelByStatus, statusColor } from 'models/project-status.model';
 
 const Project = () => {
   // status
   const [statusList, setStatusList] = useState<StatusType[]>([
-    { name: 'abc', label: 'abc' },
-    { name: 'abc', label: 'abc' },
-    { name: 'abc', label: 'abc' },
+    { name: 'Waiting', label: 'Waiting' },
+    { name: 'Pending', label: 'Pending' },
+    { name: 'In-progress', label: 'Process' },
+    { name: 'Done', label: 'Done' },
+    { name: 'Deleted', label: 'Delete' },
+    { name: 'Denied', label: 'Deny' },
   ]);
 
   // age
   const [ageList, setAgeList] = useState<AgeType[]>([
-    { startAge: 10, endDate: 10, label: '10 - 10' },
-    { startAge: 10, endDate: 10, label: '10 - 10' },
-    { startAge: 10, endDate: 10, label: '10 - 10' },
+    { startAge: 18, endAge: 25, label: '15 - 25 years old' },
+    { startAge: 26, endAge: 33, label: '26 - 33 years old' },
+    { startAge: 34, endAge: 41, label: '34 - 41 years old' },
+    { startAge: 42, endAge: 49, label: '42 - 49 years old' },
+    { startAge: 50, endAge: 57, label: '50 - 57 years old' },
+    { startAge: 57, endAge: 64, label: '57 - 64 years old' },
   ]);
 
   // price
   const [priceList, setPriceList] = useState<PriceType[]>([
-    { startPrice: 10, endPrice: 10, label: '10 - 10' },
-    { startPrice: 10, endPrice: 10, label: '10 - 10' },
-    { startPrice: 10, endPrice: 10, label: '10 - 10' },
+    { startPrice: 10000, endPrice: 50000, label: '10.000đ - 50.000đ' },
+    { startPrice: 50000, endPrice: 100000, label: '50.000đ - 100.000đ' },
+    { startPrice: 100000, endPrice: 500000, label: '100.000d - 500.000đ' },
+    { startPrice: 500000, endPrice: 1000000, label: '500.000d - 1.000.000đ' },
+    {
+      startPrice: 1000000,
+      endPrice: 2000000,
+      label: '1.000.000d - 2.000.000đ',
+    },
+    {
+      startPrice: 2000000,
+      endPrice: 5000000,
+      label: '2.000.000đ - 5.000.000đ',
+    },
   ]);
 
   // created date
@@ -54,29 +74,116 @@ const Project = () => {
   });
 
   // table
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(projects);
   const columns = useMemo(
     () => [
       {
-        Header: 'Column 1',
-        accessor: 'col1',
-        Cell: ({ cell: { value } }) => <></>,
+        Header: '',
+        accessor: 'id',
+        Cell: ({ cell: { value } }) => (
+          <th>
+            <label>
+              <input type="checkbox" className="checkbox" />
+            </label>
+          </th>
+        ),
       },
       {
-        Header: 'Column 2',
-        accessor: 'col2',
+        Header: 'Customer',
+        accessor: 'poster.firstName',
+        Cell: ({ cell }) => {
+          const { original } = cell.row;
+
+          return (
+            <div className="flex flex-row items-center">
+              <div className="avatar hidden mr-3 md:block">
+                <div className="w-10 h-10">
+                  <img src={original.poster.avatar} alt="User image" />
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm">{`${original.poster.lastName} ${original.poster.firstName}`}</p>
+              </div>
+            </div>
+          );
+        },
       },
       {
-        Header: 'Column 3',
-        accessor: 'col3',
+        Header: 'Created',
+        accessor: 'createDate',
+        Cell: ({ cell: { value } }) => (
+          <span className="text-sm ">
+            {dayjs(new Date(value as Date).toLocaleDateString()).format(
+              'DD/MM/YYYY'
+            )}
+          </span>
+        ),
       },
       {
-        Header: 'Column 4',
-        accessor: 'col4',
+        Header: 'Name',
+        accessor: 'name',
+        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
       },
       {
-        Header: 'Column 5',
-        accessor: 'col5',
+        Header: 'Min Age',
+        accessor: 'minAge',
+        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
+      },
+      {
+        Header: 'Max Age',
+        accessor: 'maxAge',
+        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
+      },
+      {
+        Header: 'Price',
+        accessor: 'price',
+        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
+      },
+      {
+        Header: 'Response',
+        accessor: 'responseDeadline',
+        Cell: ({ cell: { value } }) => (
+          <span className="text-sm">
+            {' '}
+            {dayjs(new Date(value as Date).toLocaleDateString()).format(
+              'DD/MM/YYYY'
+            )}
+          </span>
+        ),
+      },
+      {
+        Header: 'Deadline',
+        accessor: 'projectDeadline',
+        Cell: ({ cell: { value } }) => (
+          <span className="text-sm">
+            {' '}
+            {dayjs(new Date(value as Date).toLocaleDateString()).format(
+              'DD/MM/YYYY'
+            )}
+          </span>
+        ),
+      },
+      {
+        Header: 'Updated',
+        accessor: 'updateDate',
+        Cell: ({ cell: { value } }) => (
+          <span className="text-sm">
+            {' '}
+            {dayjs(new Date(value as Date).toLocaleDateString()).format(
+              'DD/MM/YYYY'
+            )}
+          </span>
+        ),
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Cell: ({ cell: { value } }) => (
+          <div className={`badge badge-${statusColor(value)}`}>
+            {getLabelByStatus(value)}
+          </div>
+        ),
       },
     ],
     []
@@ -107,6 +214,7 @@ const Project = () => {
               data={statusList}
               value={null}
               onChange={null}
+              width={'w-[13em]'}
             />
             {/* age */}
             <MultipleSelect
@@ -115,6 +223,7 @@ const Project = () => {
               data={ageList}
               value={null}
               onChange={null}
+              width={'w-[15em]'}
             />
             {/* price */}
             <MultipleSelect
@@ -123,6 +232,7 @@ const Project = () => {
               data={priceList}
               value={null}
               onChange={null}
+              width={'w-[18em]'}
             />
           </div>
         </div>

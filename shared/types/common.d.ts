@@ -15,7 +15,7 @@ type StatusType = {
 
 type AgeType = {
   startAge: number;
-  endDate: number;
+  endAge: number;
   label: string;
 };
 

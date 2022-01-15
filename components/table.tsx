@@ -34,11 +34,6 @@ const Table = ({ columns, data }: TableProps) => {
                   {row.cells.map((cell) => {
                     return (
                       <>
-                        <th>
-                          <label>
-                            <input type="checkbox" className="checkbox" />
-                          </label>
-                        </th>
                         <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                       </>
                     );

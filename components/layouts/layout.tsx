@@ -26,9 +26,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
       <div className="flex h-screen drawer">
         <Sidebar />
-        <div className="flex flex-col flex-1 w-full drawer-content">
+        <div className="flex flex-col flex-1 overflow-auto w-[1640px] drawer-content">
           <Header />
-          <main className="h-full w-full overflow-auto">{children}</main>
+          <main className="w-[1640px]">{children}</main>
         </div>
       </div>
     </>

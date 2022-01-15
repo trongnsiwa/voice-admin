@@ -7,6 +7,7 @@ interface MultipleSelectProps {
   data: any[];
   value: string | null;
   onChange: any;
+  width: any;
 }
 
 const MultipleSelect = ({
@@ -15,11 +16,14 @@ const MultipleSelect = ({
   data,
   value,
   onChange,
+  width,
 }: MultipleSelectProps) => {
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
-      <Popover.Button className="pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent w-[15em]">
+      <Popover.Button
+        className={`pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent ${width}`}
+      >
         <span className="my-auto text-gray-600 font-medium">{name}</span>
       </Popover.Button>
 
