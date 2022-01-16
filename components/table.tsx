@@ -49,56 +49,69 @@ const Table = ({ columns, data, total }: TableProps) => {
             className="select select-bordered text-gray-600"
           >
             {[10, 25, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
+              <option key={`size_${pageSize}`} value={pageSize}>
                 {pageSize}
               </option>
             ))}
           </select>
         </div>
       </div>
-      <table className="table w-full border-t" {...getTableProps()}>
+      <table
+        key={'table'}
+        className="table w-full border-t"
+        {...getTableProps()}
+      >
         <thead>
           <tr>
-            {headers.map((column, index) => (
-              // eslint-disable-next-line react/jsx-key
-              <th
-                {...column.getHeaderProps(column.getSortByToggleProps())}
-                className="cursor-pointer px-10"
-              >
-                <div className="flex items-center gap-1">
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <BsSortDown className="w-5 h-5 text-gray-500" />
-                      ) : (
+            {headers.map((column, index) => {
+              const { key, ...restHeaderProps } = column.getHeaderProps(
+                column.getSortByToggleProps()
+              );
+
+              return (
+                <th
+                  key={`header_${key}`}
+                  {...restHeaderProps}
+                  className="cursor-pointer px-10"
+                >
+                  <div className="flex items-center gap-1">
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <BsSortDown className="w-5 h-5 text-gray-500" />
+                        ) : (
+                          <BsSortUp className="w-5 h-5 text-gray-500" />
+                        )
+                      ) : index < headers.length - 1 ? (
                         <BsSortUp className="w-5 h-5 text-gray-500" />
-                      )
-                    ) : index < headers.length - 1 ? (
-                      <BsSortUp className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      ''
-                    )}
-                  </span>
-                </div>
-              </th>
-            ))}
+                      ) : (
+                        ''
+                      )}
+                    </span>
+                  </div>
+                </th>
+              );
+            })}
           </tr>
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody key={'body'} {...getTableBodyProps()}>
           {page.length > 0 ? (
             page.map((row) => {
               prepareRow(row);
+
+              const { key, ...restRowProps } = row.getRowProps();
+
               return (
                 <>
-                  <tr {...row.getRowProps()} className="border-b">
+                  <tr key={`row_${key}`} {...restRowProps} className="border-b">
                     {row.cells.map((cell) => {
+                      const { key, ...restCellProps } = cell.getCellProps();
+
                       return (
-                        <>
-                          <td {...cell.getCellProps()} className="px-10">
-                            {cell.render('Cell')}
-                          </td>
-                        </>
+                        <td key={key} {...restCellProps} className="px-10">
+                          {cell.render('Cell')}
+                        </td>
                       );
                     })}
                   </tr>

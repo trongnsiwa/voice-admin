@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 import { getLabelByStatus, statusColor } from 'models/project-status.model';
 import { Column } from 'react-table';
 import Link from 'next/link';
+import classNames from 'classnames';
 
 const Project = () => {
   // status
@@ -104,7 +105,7 @@ const Project = () => {
         Header: 'Created',
         accessor: 'createDate',
         Cell: ({ cell: { value } }) => (
-          <span className="text-sm ">
+          <span className="text-sm">
             {dayjs(new Date(value as Date).toLocaleDateString()).format(
               'DD/MM/YYYY'
             )}
@@ -140,7 +141,6 @@ const Project = () => {
         accessor: 'responseDeadline',
         Cell: ({ cell: { value } }) => (
           <span className="text-sm">
-            {' '}
             {dayjs(new Date(value as Date).toLocaleDateString()).format(
               'DD/MM/YYYY'
             )}
@@ -152,7 +152,6 @@ const Project = () => {
         accessor: 'projectDeadline',
         Cell: ({ cell: { value } }) => (
           <span className="text-sm">
-            {' '}
             {dayjs(new Date(value as Date).toLocaleDateString()).format(
               'DD/MM/YYYY'
             )}
@@ -164,7 +163,6 @@ const Project = () => {
         accessor: 'updateDate',
         Cell: ({ cell: { value } }) => (
           <span className="text-sm">
-            {' '}
             {dayjs(new Date(value as Date).toLocaleDateString()).format(
               'DD/MM/YYYY'
             )}
@@ -174,21 +172,33 @@ const Project = () => {
       {
         Header: 'Status',
         accessor: 'status',
-        Cell: ({ cell: { value } }) => (
-          <div className={`badge ${statusColor(value)} text-sm`}>
-            {getLabelByStatus(value)}
-          </div>
-        ),
+        Cell: ({ cell: { value } }) => {
+          const className = classNames(
+            'badge',
+            {
+              'badge-neutral': value === 'Waiting',
+              'badge-warning': value === 'Pending',
+              'badge-success': value === 'Done',
+              'badge-error': value === 'Delete' || value === 'Deny',
+              'badge-info': value === 'Progress',
+            },
+            'text-sm'
+          );
+
+          return <div className={className}>{getLabelByStatus(value)}</div>;
+        },
       },
       {
         Header: 'Action',
         accessor: 'id',
         Cell: ({ cell: { value } }) => (
           <Link href={`/project/${value}`} passHref>
-            <HiOutlinePencilAlt
-              className="w-6 h-6 cursor-pointer text-gray-600"
-              title="View Detail"
-            />
+            <a>
+              <HiOutlinePencilAlt
+                className="w-6 h-6 cursor-pointer text-gray-600"
+                title="View Detail"
+              />
+            </a>
           </Link>
         ),
       },
