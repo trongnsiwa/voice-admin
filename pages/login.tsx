@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '@redux/store/hooks';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { Url } from 'url';
 import { useBoolean } from 'usehooks-ts';
 import * as Yup from 'yup';
 
@@ -72,70 +71,27 @@ const Login = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex bg-gradient-to-t from-secondary via-white  to-secondary relative">
-      <img
-        src="/images/wavy.png"
-        alt=""
-        className="hidden md:block absolute w-full h-full bottom-0 scale-x-[-1] overflow-hidden object-cover -left-[30%] lg:left-0 object-right"
-      />
-      <div
-        className="bg-gradient-to-b from-secondary via-white to-secondary
-       h-screen w-1/12 md:w-1/2"
-      >
-        <h1 className="hidden md:block absolute top-[20%] left-[7%] font-extrabold text-3xl lg:text-5xl xl:text-6xl leading-tight text-gray-700">
-          &quot;Vocal
-          <br /> To The Moon&quot;
-        </h1>
-        <img
-          src="/images/login-1.jpg"
-          alt=""
-          className="hidden lg:block absolute w-[12em] bottom-[38%] left-[14%] rounded-2xl shadow-primary shadow-xl rotate-12"
-        />
-        <img
-          src="/images/login-2.jpg"
-          alt=""
-          className="hidden lg:block absolute w-[12em] bottom-[20%] left-8 rounded-2xl shadow-primary shadow-xl rotate-[350deg]"
-        />
-        <img
-          src="/images/dashboard.png"
-          alt=""
-          className="hidden md:block absolute w-[20em] h-[20em] lg:w-[35em] lg:h-[35em] xl:w-[40em] xl:h-[40em] bottom-0 left-[5%] xl:left-1/3 xl:-translate-x-1/3 z-[2]"
-        />
-        <img
-          src="/images/message.png"
-          alt=""
-          className="hidden md:block absolute w-[6em] lg:w-[7em] xl:w-[10em] top-[9%] xl:top-[5%] left-[3%] rotate-[330deg]"
-        />
-        <img
-          src="/images/warning.png"
-          alt=""
-          className="hidden lg:block absolute w-[7em] xl:w-[10em] top-[2%] left-1/2 -translate-x-[100%] scale-x-[-1] rotate-[270deg] z-[2]"
-        />
-        <img
-          src="/images/music.png"
-          alt=""
-          className="hidden lg:block absolute w-[5em] top-[15%] left-1/3 xl:left-1/4 rotate-[30deg]"
-        />
-      </div>
-      <div className="h-full bg-white shadow-2xl w-11/12 lg:w-1/2 rounded-l-[5em] z-[1]">
-        <div className="mx-auto max-w-md mt-24">
+    <div className="w-screen h-screen flex relative">
+      <div className="bg-hero bg-cover h-screen w-0 md:w-1/2"></div>
+      <div className="h-full bg-primary-dark text-white shadow-2xl shadow-secondary-dark w-full lg:w-1/2 z-[1] mx-auto flex justify-center items-center">
+        <div className="max-w-sm md:max-w-md w-full">
           <div className="flex justify-center flex-col">
             <img
-              className="my-2 mx-auto w-[4em]"
-              src={'/images/radio-waves.png'}
+              className="my-2 mx-auto w-28"
+              src={'/images/logo.png'}
               alt=""
             />
-            <span className="text-xl text-center mt-2 font-bold text-gray-800">
-              Vocal Management App
+            <span className="text-xl text-center mt-2 font-bold text-secondary-dark">
+              Vocal Admin Management
             </span>
           </div>
           <form onSubmit={formik.handleSubmit} className="mt-8">
-            <p className="font-bold text-lg mb-5">Login</p>
+            <p className="font-bold text-lg mb-5 text-white">Login</p>
             {message && <p className="error-message mb-2">{message}</p>}
 
             <div className="form-control">
               <label htmlFor="username" className="label">
-                <span className="label-text">Username</span>
+                <span className="label-text text-white">Username</span>
               </label>
               <input
                 type="text"
@@ -144,7 +100,7 @@ const Login = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.username}
-                className={`input input-bordered input-ghost focus:border-primary hover:border-primary ${
+                className={`input input-bordered input-ghost focus:border-secondary-dark focus:bg-stone-600 hover:border-secondary-dark focus:text-white ${
                   formik.touched.username &&
                   formik.errors.username &&
                   'border-error focus:border-error hover:border-error'
@@ -159,7 +115,7 @@ const Login = () => {
 
             <div className="form-control mt-3 relative">
               <label htmlFor="password" className="label">
-                <span className="label-text">Password</span>
+                <span className="label-text text-white">Password</span>
               </label>
               <input
                 type={value ? 'text' : 'password'}
@@ -168,7 +124,7 @@ const Login = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
-                className={`input input-bordered input-ghost focus:border-primary hover:border-primary ${
+                className={`input input-bordered input-ghost focus:border-secondary-dark focus:text-white focus:bg-stone-600 hover:border-secondary-dark ${
                   formik.touched.password &&
                   formik.errors.password &&
                   'border-error focus:border-error hover:border-error'
@@ -178,8 +134,8 @@ const Login = () => {
                 className={`absolute right-3 ${
                   formik.touched.password && formik.errors.password
                     ? 'top-[43%]'
-                    : 'top-[55%]'
-                } cursor-pointer`}
+                    : 'top-[60%]'
+                } cursor-pointer text-sm hover:text-secondary`}
                 onClick={toggle}
               >
                 Show
@@ -191,13 +147,15 @@ const Login = () => {
               ) : null}
             </div>
 
-            <a className="flex justify-end text-sm mt-2 link link-primary no-underline hover:underline">
-              Forgot password?
-            </a>
+            <div className="flex justify-end">
+              <a className="text-sm mt-2 link no-underline text-white hover:text-secondary">
+                Forgot password?
+              </a>
+            </div>
 
             <button
               type="submit"
-              className="w-full mt-14 btn btn-outline btn-primary"
+              className="w-full mt-14 btn btn-primary hover:bg-stone-600 hover:border-secondary-dark hover:text-secondary"
             >
               Login
             </button>

@@ -12,6 +12,9 @@ module.exports = {
       xl: '1440px',
     },
     extend: {
+      backgroundImage: {
+        hero: "url('/images/hero.jpg')",
+      },
       spacing: {
         128: '32rem',
         144: '36rem',
@@ -30,7 +33,7 @@ module.exports = {
           DEFAULT: '#474747',
           dark: '#383838',
         },
-        error: '#fe0000',
+        error: '#E24036',
         info: {
           DEFAULT: '#E1EFFE',
           dark: '#3F83F8',
