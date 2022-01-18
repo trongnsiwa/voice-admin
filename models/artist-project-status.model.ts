@@ -8,31 +8,31 @@ export interface ArtistProjectStatus {
 export const artistProjectStatusColor: ArtistProjectStatus[] = [
   {
     code: 0,
-    label: 'Chờ xác nhận',
+    label: 'Invite Pending',
     name: 'InvitePending',
     color: 'info',
   },
   {
     code: 1,
-    label: 'Chờ xác nhận',
+    label: 'Response Pending',
     name: 'ResponsePending',
     color: 'info',
   },
   {
     code: 2,
-    label: 'Đang tham gia',
+    label: 'Accepted',
     name: 'Accept',
     color: 'warning',
   },
   {
     code: 3,
-    label: 'Từ chối',
+    label: 'Denied',
     name: 'Deny',
     color: 'error',
   },
   {
     code: 4,
-    label: 'Hoàn thành',
+    label: 'Done',
     name: 'Done',
     color: 'success',
   },
@@ -40,27 +40,23 @@ export const artistProjectStatusColor: ArtistProjectStatus[] = [
 
 export const artistProjectStatus = [
   {
-    label: 'Tất cả',
-    name: 'Tất cả',
-  },
-  {
-    label: 'Chờ xác nhận (Mời)',
+    label: 'Invite Pending',
     name: 'InvitePending',
   },
   {
-    label: 'Chờ xác nhận (Xin)',
+    label: 'Response Pending',
     name: 'ResponsePending',
   },
   {
-    label: 'Đang tham gia',
+    label: 'Accepted',
     name: 'Accept',
   },
   {
-    label: 'Từ chối',
+    label: 'Denied',
     name: 'Deny',
   },
   {
-    label: 'Hoàn thành',
+    label: 'Done',
     name: 'Done',
   },
 ];

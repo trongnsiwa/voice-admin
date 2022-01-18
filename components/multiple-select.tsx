@@ -1,5 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
-import { Fragment, ReactElement } from 'react';
+import { Fragment, ReactElement, useState } from 'react';
 
 interface MultipleSelectProps {
   icon: ReactElement;
@@ -8,6 +8,7 @@ interface MultipleSelectProps {
   value: string | null;
   onChange: any;
   width: any;
+  isDetail?: boolean;
 }
 
 const MultipleSelect = ({
@@ -17,12 +18,13 @@ const MultipleSelect = ({
   value,
   onChange,
   width,
+  isDetail = false,
 }: MultipleSelectProps) => {
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
       <Popover.Button
-        className={`pl-12 select select-ghost select-bordered cursor-default disabled caret-transparent ${width}`}
+        className={`pl-12 select select-ghost bg-white select-bordered cursor-default disabled caret-transparent ${width}`}
       >
         <span className="my-auto text-gray-600 font-medium">{name}</span>
       </Popover.Button>
@@ -36,20 +38,24 @@ const MultipleSelect = ({
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute bg-white shadow-lg p-5 w-full z-10">
-          <label className="cursor-pointer label">
+        <Popover.Panel
+          className={`absolute bg-white shadow-lg p-5 w-full z-10 ${
+            isDetail && '-top-[19em]'
+          }`}
+        >
+          <label className="cursor-pointer label justify-start">
             <input
               type="checkbox"
               className="checkbox checkbox-primary"
               value="all"
             />
-            <span className="label-text capitalize">All</span>
+            <span className="label-text capitalize pl-3">All</span>
           </label>
           {data &&
             data.map((item, index) => (
               <label
                 key={`chk_${item}_${index}`}
-                className="cursor-pointer label"
+                className="cursor-pointer label justify-start"
               >
                 <input
                   type="checkbox"

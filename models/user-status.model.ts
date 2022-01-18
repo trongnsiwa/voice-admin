@@ -5,30 +5,25 @@ export interface UserStatus {
   color?: 'success' | 'error' | 'warning' | 'neutral' | 'info';
 }
 
-export const userStatusColor: UserStatus[] = [
-  {
-    code: '-1',
-    name: 'Tất cả',
-    label: 'Tất cả',
-  },
+export const userStatusList = <UserStatus[]>[
   {
     code: '0',
-    label: 'Kích hoạt',
-    name: 'Activated',
+    label: 'Active',
+    name: 'Active',
     color: 'success',
   },
   {
     code: '1',
-    label: 'Đã chặn',
+    label: 'Banned',
     name: 'Banned',
     color: 'error',
   },
 ];
 
 export const getStatusByName = (name: string) => {
-  return userStatusColor.find((statusColor) => statusColor.name === name);
+  return userStatusList.find((status) => status.name === name);
 };
 
 export const getStatusByCode = (code: string) => {
-  return userStatusColor.find((statusColor) => statusColor.code === code);
+  return userStatusList.find((status) => status.code === code);
 };

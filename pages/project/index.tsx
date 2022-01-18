@@ -12,52 +12,18 @@ import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 
 import Table from '@components/table';
-import { Project, projects } from 'models/project.model';
+import { ageList, priceList, Project, projects } from 'models/project.model';
 import dayjs from 'dayjs';
-import { getLabelByStatus, statusColor } from 'models/project-status.model';
+import {
+  getLabelByStatus,
+  projectStatusList,
+  statusColor,
+} from 'models/project-status.model';
 import { Column } from 'react-table';
 import Link from 'next/link';
 import classNames from 'classnames';
 
 const Project = () => {
-  // status
-  const [statusList, setStatusList] = useState<StatusType[]>([
-    { name: 'Waiting', label: 'Waiting' },
-    { name: 'Pending', label: 'Pending' },
-    { name: 'In-progress', label: 'Process' },
-    { name: 'Done', label: 'Done' },
-    { name: 'Deleted', label: 'Delete' },
-    { name: 'Denied', label: 'Deny' },
-  ]);
-
-  // age
-  const [ageList, setAgeList] = useState<AgeType[]>([
-    { startAge: 18, endAge: 25, label: '15 - 25 years old' },
-    { startAge: 26, endAge: 33, label: '26 - 33 years old' },
-    { startAge: 34, endAge: 41, label: '34 - 41 years old' },
-    { startAge: 42, endAge: 49, label: '42 - 49 years old' },
-    { startAge: 50, endAge: 57, label: '50 - 57 years old' },
-    { startAge: 57, endAge: 64, label: '57 - 64 years old' },
-  ]);
-
-  // price
-  const [priceList, setPriceList] = useState<PriceType[]>([
-    { startPrice: 10000, endPrice: 50000, label: '10.000đ - 50.000đ' },
-    { startPrice: 50000, endPrice: 100000, label: '50.000đ - 100.000đ' },
-    { startPrice: 100000, endPrice: 500000, label: '100.000d - 500.000đ' },
-    { startPrice: 500000, endPrice: 1000000, label: '500.000d - 1.000.000đ' },
-    {
-      startPrice: 1000000,
-      endPrice: 2000000,
-      label: '1.000.000d - 2.000.000đ',
-    },
-    {
-      startPrice: 2000000,
-      endPrice: 5000000,
-      label: '2.000.000đ - 5.000.000đ',
-    },
-  ]);
-
   // created date
   const [selectionRange, setSelectionRange] = useState<DateRangeType>({
     startDate: new Date(),
@@ -75,8 +41,49 @@ const Project = () => {
   const [searchBy, setSearchBy] = useState('');
   const [totalResults, setTotalResults] = useState(0);
 
+  // const loadData = () => {
+  //   var dateCreated = null;
+  //   if (filterObj.CreateDate != null) {
+  //     dateCreated = new Date(
+  //       new Date(filterObj.CreateDate).setHours(0, 0, 0, 0)
+  //     );
+  //     dateCreated = new Date(
+  //       dateCreated.getTime() - dateCreated.getTimezoneOffset() * 60000
+  //     ).toJSON();
+  //   }
+
+  //   getProjects(page, resultsPerPage, searchBy, sortObj, {
+  //     ...filterObj,
+  //     CreateDate: dateCreated,
+  //   })
+  //     .then((res) => {
+  //       if (res.data) {
+  //         setData(res.data.data);
+  //         setTotalResults(res.data.totalRow);
+  //       } else {
+  //         setData([]);
+  //         setTotalResults(0);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setData([]);
+  //       setTotalResults(0);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   // setData(projects.slice((page - 1) * resultsPerPage, page * resultsPerPage));
+
+  //   loadData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [page, searchBy, sortObj, filterObj]);
+
+  // function onPageChange(p: any) {
+  //   setPage(p);
+  // }
+
   // table
-  const [data, setData] = useState(projects);
+  const [data, setData] = useState<Project[]>(projects);
   const columns = useMemo<Column[]>(
     () => [
       {
@@ -172,6 +179,9 @@ const Project = () => {
       {
         Header: 'Status',
         accessor: 'status',
+        disableSortBy: true,
+        disableFilters: true,
+        defaultCanSort: false,
         Cell: ({ cell: { value } }) => {
           const className = classNames(
             'badge',
@@ -182,7 +192,7 @@ const Project = () => {
               'badge-error': value === 'Delete' || value === 'Deny',
               'badge-info': value === 'Progress',
             },
-            'text-sm'
+            'text-sm p-3'
           );
 
           return <div className={className}>{getLabelByStatus(value)}</div>;
@@ -193,7 +203,7 @@ const Project = () => {
         accessor: 'id',
         Cell: ({ cell: { value } }) => (
           <Link href={`/project/${value}`} passHref>
-            <a>
+            <a className="btn btn-circle btn-outline border-0 btn-ghost">
               <HiOutlinePencilAlt
                 className="w-6 h-6 cursor-pointer text-gray-600"
                 title="View Detail"
@@ -208,7 +218,7 @@ const Project = () => {
 
   return (
     <Layout>
-      <div className="pt-10">
+      <div className="pt-28">
         <div className="px-10">
           <div className="flex justify-between items-center border-b-2 border-gray-100 mb-5 pb-5">
             <h1 className="text-2xl font-semibold ">Project</h1>
@@ -228,7 +238,7 @@ const Project = () => {
             <MultipleSelect
               icon={<BsTags className="w-6 h-6 text-gray-500" />}
               name="Status"
-              data={statusList}
+              data={projectStatusList}
               value={null}
               onChange={null}
               width={'w-[13em]'}

@@ -24,6 +24,7 @@ export const customers: Customer[] = [
     avatar:
       'https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60',
     createdDate: new Date(),
+    updatedDate: new Date(),
   },
   {
     id: 'C2',
@@ -36,6 +37,7 @@ export const customers: Customer[] = [
     avatar:
       'https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60',
     createdDate: new Date(),
+    updatedDate: new Date(),
   },
   {
     id: 'C3',
@@ -48,6 +50,7 @@ export const customers: Customer[] = [
     avatar:
       'https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGF2YXRhcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60',
     createdDate: new Date(),
+    updatedDate: new Date(),
   },
   {
     id: 'C4',
@@ -56,10 +59,11 @@ export const customers: Customer[] = [
     gender: 'Nữ',
     firstName: 'Nhã',
     lastName: 'Tuệ',
-    status: 'Inactive',
+    status: 'Banned',
     avatar:
       'https://images.unsplash.com/photo-1569913486515-b74bf7751574?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGF2YXRhcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60',
     createdDate: new Date(),
+    updatedDate: new Date(),
   },
   {
     id: 'C5',
@@ -72,5 +76,6 @@ export const customers: Customer[] = [
     avatar:
       'https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGF2YXRhcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=60',
     createdDate: new Date(),
+    updatedDate: new Date(),
   },
 ];

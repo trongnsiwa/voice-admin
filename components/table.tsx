@@ -1,13 +1,26 @@
 import { usePagination, useSortBy, useTable } from 'react-table';
-import { BsSortDown, BsSortUp } from 'react-icons/bs';
+import { BsSortDown, BsSortUp, BsTags } from 'react-icons/bs';
+import MultipleSelect from './multiple-select';
 
 interface TableProps {
   columns: any;
   data: any;
   total: number;
+  isDetail?: boolean;
+  onStatusChange?: React.ChangeEventHandler<HTMLSelectElement> | undefined;
+  statusList?: any[];
+  notFoundMessage?: string;
 }
 
-const Table = ({ columns, data, total }: TableProps) => {
+const Table = ({
+  columns,
+  data,
+  total,
+  isDetail = false,
+  onStatusChange,
+  statusList,
+  notFoundMessage = 'No Result Found',
+}: TableProps) => {
   const tableInstance = useTable(
     { columns, data, manualPagination: true },
     useSortBy,
@@ -28,8 +41,43 @@ const Table = ({ columns, data, total }: TableProps) => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
+
     prepareRow,
   } = tableInstance;
+
+  const paginationButtons = (
+    <div>
+      <button
+        onClick={() => gotoPage(0)}
+        disabled={!canPreviousPage}
+        className="btn btn-sm"
+      >
+        {'<<'}
+      </button>{' '}
+      <button
+        onClick={() => previousPage()}
+        disabled={!canPreviousPage}
+        className="btn btn-sm"
+      >
+        {'<'}
+      </button>{' '}
+      <span className="px-3">{pageIndex + 1}</span>{' '}
+      <button
+        onClick={() => nextPage()}
+        disabled={!canNextPage}
+        className="btn btn-sm"
+      >
+        {'>'}
+      </button>{' '}
+      <button
+        onClick={() => gotoPage(pageCount - 1)}
+        disabled={!canNextPage}
+        className="btn btn-sm"
+      >
+        {'>>'}
+      </button>{' '}
+    </div>
+  );
 
   return (
     <div className="overflow-x-auto">
@@ -60,6 +108,7 @@ const Table = ({ columns, data, total }: TableProps) => {
         key={'table'}
         className="table w-full border-t"
         {...getTableProps()}
+        style={{ display: 'table' }}
       >
         <thead>
           <tr>
@@ -73,6 +122,11 @@ const Table = ({ columns, data, total }: TableProps) => {
                   key={`header_${key}`}
                   {...restHeaderProps}
                   className="cursor-pointer px-10"
+                  title={
+                    (index < headers.length - 1 && !isDetail) || isDetail
+                      ? `Sort by ${column.render('Header')}`
+                      : undefined
+                  }
                 >
                   <div className="flex items-center gap-1">
                     {column.render('Header')}
@@ -83,7 +137,8 @@ const Table = ({ columns, data, total }: TableProps) => {
                         ) : (
                           <BsSortUp className="w-5 h-5 text-gray-500" />
                         )
-                      ) : index < headers.length - 1 ? (
+                      ) : (index < headers.length - 1 && !isDetail) ||
+                        isDetail ? (
                         <BsSortUp className="w-5 h-5 text-gray-500" />
                       ) : (
                         ''
@@ -119,58 +174,51 @@ const Table = ({ columns, data, total }: TableProps) => {
               );
             })
           ) : (
-            <tr className="border-b">
-              <td colSpan={headers.length - 1} className="text-center">
+            <tr className={isDetail ? '' : 'border-b'}>
+              <td colSpan={headers.length} className="text-center">
                 <img
                   src="https://www.workabroad.ph/assets/img/no-result.svg"
                   alt="No Result Found"
                   className="w-40 h-40 mx-auto"
                 />
                 <p className="py-5 font-medium text-gray-500">
-                  No Result Found
+                  {notFoundMessage}
                 </p>
               </td>
             </tr>
           )}
         </tbody>
-        <tfoot className="border-b">
-          <tr>
-            <td colSpan={headers.length - 1} className="px-10">
-              <div>
-                <button
-                  onClick={() => gotoPage(0)}
-                  disabled={!canPreviousPage}
-                  className="btn btn-sm"
-                >
-                  {'<<'}
-                </button>{' '}
-                <button
-                  onClick={() => previousPage()}
-                  disabled={!canPreviousPage}
-                  className="btn btn-sm"
-                >
-                  {'<'}
-                </button>{' '}
-                <span className="px-3">{pageIndex + 1}</span>{' '}
-                <button
-                  onClick={() => nextPage()}
-                  disabled={!canNextPage}
-                  className="btn btn-sm"
-                >
-                  {'>'}
-                </button>{' '}
-                <button
-                  onClick={() => gotoPage(pageCount - 1)}
-                  disabled={!canNextPage}
-                  className="btn btn-sm"
-                >
-                  {'>>'}
-                </button>{' '}
-              </div>
-            </td>
-          </tr>
-        </tfoot>
+
+        {!isDetail && (
+          <tfoot className="border-b">
+            <tr>
+              <td colSpan={headers.length - 1} className="px-10">
+                {paginationButtons}
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
+
+      {isDetail && (
+        <div className="bg-gray-50 py-3 fixed w-[calc(100%-280px)] bottom-14">
+          <div className="px-10 flex items-center justify-between w-full">
+            {paginationButtons}
+            {isDetail && statusList && statusList.length > 0 && (
+              <div>
+                <MultipleSelect
+                  icon={<BsTags className="w-6 h-6 text-gray-500" />}
+                  name="Status"
+                  data={statusList}
+                  value={null}
+                  onChange={onStatusChange}
+                  width={'w-[15em]'}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

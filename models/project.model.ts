@@ -14,6 +14,37 @@ export interface Project {
   updateDate: Date;
 }
 
+export const ageList = <AgeType[]>[
+  { startAge: 18, endAge: 25, label: '15 - 25 years old' },
+  { startAge: 26, endAge: 33, label: '26 - 33 years old' },
+  { startAge: 34, endAge: 41, label: '34 - 41 years old' },
+  { startAge: 42, endAge: 49, label: '42 - 49 years old' },
+  { startAge: 50, endAge: 57, label: '50 - 57 years old' },
+  { startAge: 57, endAge: 64, label: '57 - 64 years old' },
+];
+
+export const priceList = <PriceType[]>[
+  { startPrice: undefined, endPrice: 50000, label: 'Under 50.000đ' },
+  { startPrice: 50000, endPrice: 100000, label: '50.000đ to 100.000đ' },
+  { startPrice: 100000, endPrice: 500000, label: '100.000d to 500.000đ' },
+  { startPrice: 500000, endPrice: 1000000, label: '500.000d to 1.000.000đ' },
+  {
+    startPrice: 1000000,
+    endPrice: 2000000,
+    label: '1.000.000d to 2.000.000đ',
+  },
+  {
+    startPrice: 2000000,
+    endPrice: 5000000,
+    label: '2.000.000đ to 5.000.000đ',
+  },
+  {
+    startPrice: 2000000,
+    endPrice: undefined,
+    label: '5.000.000đ & Above',
+  },
+];
+
 export const projects: Project[] = [
   {
     id: 'P1',

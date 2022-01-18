@@ -8,6 +8,11 @@ type StatusType = {
   label: string;
 };
 
+type RatingType = {
+  name: string;
+  label: string;
+};
+
 type AgeType = {
   startAge: number;
   endAge: number;
@@ -17,5 +22,10 @@ type AgeType = {
 type PriceType = {
   startPrice: number;
   endPrice: number;
+  label: string;
+};
+
+type GenderType = {
+  id: string;
   label: string;
 };

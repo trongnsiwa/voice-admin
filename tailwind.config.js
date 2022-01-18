@@ -33,7 +33,10 @@ module.exports = {
           DEFAULT: '#474747',
           dark: '#383838',
         },
-        error: '#E24036',
+        error: {
+          light: '#ffeeed',
+          DEFAULT: '#E24036',
+        },
         info: {
           DEFAULT: '#E1EFFE',
           dark: '#3F83F8',
