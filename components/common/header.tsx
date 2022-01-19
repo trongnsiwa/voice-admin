@@ -44,7 +44,11 @@ const Header = () => {
 
   return (
     <AnimatePresence initial={false}>
-      <div className="mb-2 shadow-lg px-3 fixed w-[calc(100%-280px)]">
+      <div
+        className={`mb-2 shadow-lg px-3 fixed ${
+          !open ? 'w-[calc(100%-80px)]' : 'w-[calc(100%-280px)]'
+        }`}
+      >
         <div className="navbar">
           <div className="flex-1">
             <input

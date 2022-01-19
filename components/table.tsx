@@ -1,6 +1,7 @@
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { BsSortDown, BsSortUp, BsTags } from 'react-icons/bs';
 import MultipleSelect from './multiple-select';
+import { useAppSelector } from '@redux/store/hooks';
 
 interface TableProps {
   columns: any;
@@ -10,6 +11,7 @@ interface TableProps {
   onStatusChange?: React.ChangeEventHandler<HTMLSelectElement> | undefined;
   statusList?: any[];
   notFoundMessage?: string;
+  hasBottom?: boolean;
 }
 
 const Table = ({
@@ -20,7 +22,10 @@ const Table = ({
   onStatusChange,
   statusList,
   notFoundMessage = 'No Result Found',
+  hasBottom = true,
 }: TableProps) => {
+  const { open } = useAppSelector((state) => state.sidebar);
+
   const tableInstance = useTable(
     { columns, data, manualPagination: true },
     useSortBy,
@@ -41,7 +46,6 @@ const Table = ({
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
-
     prepareRow,
   } = tableInstance;
 
@@ -192,7 +196,7 @@ const Table = ({
         {!isDetail && (
           <tfoot className="border-b">
             <tr>
-              <td colSpan={headers.length - 1} className="px-10">
+              <td colSpan={headers.length} className="px-10">
                 {paginationButtons}
               </td>
             </tr>
@@ -201,7 +205,11 @@ const Table = ({
       </table>
 
       {isDetail && (
-        <div className="bg-gray-50 py-3 fixed w-[calc(100%-280px)] bottom-14">
+        <div
+          className={`bg-gray-50 py-3 fixed ${
+            !open ? 'w-[calc(100%-80px)]' : 'w-[calc(100%-280px)]'
+          } ${hasBottom ? 'bottom-14' : 'bottom-0'}`}
+        >
           <div className="px-10 flex items-center justify-between w-full">
             {paginationButtons}
             {isDetail && statusList && statusList.length > 0 && (
@@ -213,6 +221,8 @@ const Table = ({
                   value={null}
                   onChange={onStatusChange}
                   width={'w-[15em]'}
+                  isDetail={isDetail}
+                  hasBottom={hasBottom}
                 />
               </div>
             )}

@@ -31,7 +31,7 @@ const Modal = ({
         className="modal-box font-semibold text-center text-gray-500"
         ref={ref}
       >
-        <p className="font-bold text-xl text-black my-3">{title}</p>
+        <p className="font-bold text-xl text-black mt-3 mb-1">{title}</p>
         <p>{description}</p>
         <p>Are you sure?</p>
         <div className="modal-action mt-3">

@@ -9,6 +9,7 @@ interface MultipleSelectProps {
   onChange: any;
   width: any;
   isDetail?: boolean;
+  hasBottom?: boolean;
 }
 
 const MultipleSelect = ({
@@ -19,6 +20,7 @@ const MultipleSelect = ({
   onChange,
   width,
   isDetail = false,
+  hasBottom = true,
 }: MultipleSelectProps) => {
   return (
     <Popover className="relative">
@@ -40,7 +42,7 @@ const MultipleSelect = ({
       >
         <Popover.Panel
           className={`absolute bg-white shadow-lg p-5 w-full z-10 ${
-            isDetail && '-top-[19em]'
+            isDetail && (hasBottom ? '-top-[19em]' : '-top-[21em]')
           }`}
         >
           <label className="cursor-pointer label justify-start">
