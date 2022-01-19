@@ -1,4 +1,5 @@
 import Layout from '@components/layouts/layout';
+import Modal from '@components/modal';
 import MultipleSelect from '@components/multiple-select';
 import SearchBar from '@components/search-bar';
 import Table from '@components/table';
@@ -303,25 +304,33 @@ const Customer = () => {
         </div>
       </div>
 
-      {banModal.open && (
-        <div className={`modal ${banModal.open && 'modal-open'}`}>
-          <div className="modal-box" ref={banModalRef}>
-            <p>
-              Enim dolorem dolorum omnis atque necessitatibus. Consequatur aut
-              adipisci qui iusto illo eaque. Consequatur repudiandae et. Nulla
-              ea quasi eligendi. Saepe velit autem minima.
-            </p>
-            <div className="modal-action">
-              <button onClick={closeBanModal} className="btn btn-primary">
-                Accept
-              </button>
-              <button className="btn" onClick={closeBanModal}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={banModal.open}
+        title={`You are about to ${
+          banModal.status === 'Active' ? 'ban' : 'activate'
+        } this
+            account`}
+        description={
+          banModal.status === 'Active'
+            ? 'This will ban this account.'
+            : 'This will activate this account'
+        }
+        btnCancel={{
+          name: 'Cancel',
+          class: 'btn btn-ghost',
+          onClick: closeBanModal,
+        }}
+        btnOK={{
+          name: banModal.status === 'Active' ? 'Ban' : 'Activate',
+          class: `btn border-0 px-6 ${
+            banModal.status === 'Active'
+              ? 'bg-red-500 hover:bg-red-600'
+              : 'bg-green-500 hover:bg-green-600'
+          }`,
+          onClick: closeBanModal,
+        }}
+        ref={banModalRef}
+      />
     </Layout>
   );
 };

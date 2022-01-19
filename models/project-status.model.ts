@@ -5,7 +5,6 @@ export interface ProjectStatus {
 }
 
 export const projectStatusList: ProjectStatus[] = [
-  { code: -1, label: 'All', name: 'All' },
   { code: 0, label: 'Waiting', name: 'Waiting' },
   { code: 1, label: 'Pending', name: 'Pending' },
   { code: 2, label: 'In-progress', name: 'Progress' },
