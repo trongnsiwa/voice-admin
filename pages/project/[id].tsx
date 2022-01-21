@@ -236,6 +236,9 @@ const ProjectDetail = ({ project }) => {
       {
         Header: 'Status',
         accessor: 'status',
+        disableSortBy: true,
+        disableFilters: true,
+        defaultCanSort: false,
         Cell: ({ cell: { value } }) => {
           const className = classNames(
             'badge',
@@ -391,7 +394,7 @@ const ProjectDetail = ({ project }) => {
 
           <div className="card card-bordered rounded-none shadow-md">
             <div className="card-body">
-              <div className="grid lg:grid-cols-3 gap-y-10 gap-x-5">
+              <div className="grid grid-cols-3 gap-y-10 gap-x-5">
                 <div>
                   <span className="font-bold flex items-center">
                     <AiOutlineHome className="h-5 w-5 mr-1" />

@@ -281,11 +281,11 @@ const Customer = () => {
               width={'w-[13em]'}
             />
           </div>
+        </div>
 
-          <div className="border-t-2 border-gray-100">
-            {/* table */}
-            <Table columns={columns} data={data} total={totalResults} />
-          </div>
+        <div className="border-t-2 border-gray-100">
+          {/* table */}
+          <Table columns={columns} data={data} total={totalResults} />
         </div>
       </div>
 

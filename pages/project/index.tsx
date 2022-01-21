@@ -201,6 +201,9 @@ const Project = () => {
       {
         Header: 'Action',
         accessor: 'id',
+        disableSortBy: true,
+        disableFilters: true,
+        defaultCanSort: false,
         Cell: ({ cell: { value } }) => (
           <Link href={`/project/${value}`} passHref>
             <a className="btn btn-circle btn-outline border-0 btn-ghost">

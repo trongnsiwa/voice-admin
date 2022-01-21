@@ -205,7 +205,7 @@ const CustomerDetail = ({ customer }) => {
                     >
                       <AiOutlineArrowLeft className=" w-6 h-6" />
                     </span>
-                    <p className="font-bold">Quay lại</p>
+                    <p className="font-bold">Back</p>
                   </div>
                 </div>
               </button>
@@ -277,7 +277,7 @@ const CustomerDetail = ({ customer }) => {
           statusList={projectStatusList}
           isDetail={true}
           onStatusChange={undefined}
-          notFoundMessage="No Projects"
+          notFoundMessage="No Customers"
           hasBottom={false}
         />
       </div>
