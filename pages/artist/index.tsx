@@ -5,13 +5,14 @@ import SearchBar from '@components/search-bar';
 import Table from '@components/table';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { ratingList } from 'models/artist.model';
-import { Customer, customers } from 'models/customer.model';
+import { Artist, artists, ratingList } from 'models/artist.model';
 import { genderList } from 'models/gender.model';
-import { userStatusList, getStatusByName } from 'models/user-status.model';
+import { getStatusByName, userStatusList } from 'models/user-status.model';
 import Link from 'next/link';
-import { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
+import { BiUserVoice } from 'react-icons/bi';
 import { BsGenderAmbiguous, BsStar, BsTags } from 'react-icons/bs';
+import { GoHome } from 'react-icons/go';
 import {
   HiOutlineBan,
   HiOutlineCheckCircle,
@@ -20,9 +21,9 @@ import {
 import { Column } from 'react-table';
 import { useOnClickOutside } from 'usehooks-ts';
 
-const Customer = () => {
+const Artist = () => {
   // data
-  const [data, setData] = useState<Customer[]>(customers);
+  const [data, setData] = useState<Artist[]>(artists);
   const [pageIndex, setPageIndex] = useState(1);
   const pageSize = 30;
 
@@ -34,75 +35,117 @@ const Customer = () => {
     selected: null,
     status: null,
   });
-  const banModalRef = useRef(null);
 
-  // filter
-  // const [filterObj, setFilterObj] = useState<CustomerFilterObject>({
+  // const [filterObj, setFilterObj] = useState<ArtistFilterObject>({
   //   Status: null,
   //   Gender: null,
   // });
+
   const [sortObj, setSortObj] = useState<any>(null);
 
   // search
   const [searchBy, setSearchBy] = useState('');
 
   //  const loadData = () => {
-  //     getCustomers(page, resultsPerPage, searchBy.trim(), sortObj, filterObj)
-  //       .then((res) => {
-  //         if (res.data) {
-  //           setData(res.data.data);
-  //           setTotalResults(res.data.totalRow);
-  //         } else {
-  //           setData([]);
-  //           setTotalResults(0);
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         setData([]);
-  //         setTotalResults(0);
-  //       });
-  //   };
+  //    getArtists(
+  //      page,
+  //      resultsPerPage,
+  //      searchBy,
+  //      sortObj,
+  //      filterObj,
+  //      selectedCountries,
+  //      selectedStyles
+  //    )
+  //      .then((res) => {
+  //        if (res.data) {
+  //          setData(res.data.data);
+  //          setTotalResults(res.data.totalRow);
+  //        } else {
+  //          setData([]);
+  //          setTotalResults(0);
+  //        }
+  //      })
+  //      .catch((err) => {
+  //        setData([]);
+  //        setTotalResults(0);
+  //      });
+  //  };
 
-  //    useEffect(() => {
-  //     // setData(creators.slice((page - 1) * resultsPerPage, page * resultsPerPage));
+  //  useEffect(() => {
+  //    // setData(artists.slice((page - 1) * resultsPerPage, page * resultsPerPage));
 
-  //     loadData();
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [page, searchBy, sortObj, filterObj]);
+  //    loadData();
+  //    // eslint-disable-next-line react-hooks/exhaustive-deps
+  //  }, [page, filterObj, sortObj, searchBy, selectedCountries, selectedStyles]);
 
-  //    function onPageChange(p: any) {
-  //     setPage(p);
+  //  useEffect(() => {
+  //    getAllCountries().then((res) => {
+  //      setCountries(res.data.data);
+  //    });
+  //  }, []);
+
+  //  useEffect(() => {
+  //    getAllVoiceStyles().then((res) => {
+  //      setStyles(res.data.data);
+  //    });
+  //  }, []);
+
+  // const filterCountries = (value: string, isClear: boolean) => {
+  //   let search: string[] = [];
+
+  //   if (isClear) {
+  //     search = selectedCountries.filter((country) => country !== value);
+  //   } else {
+  //     search = [...selectedCountries, value];
   //   }
 
-  //   const banUser = () => {
-  //     if (banModal.selected == null || banModal.status == null) {
-  //       return;
-  //     }
+  //   console.log(search);
+  //   setSelectedCountries(search);
+  // };
 
-  //     dispatch(showLoader());
+  // const filterStyles = (value: string, isClear: boolean) => {
+  //   let search: string[] = [];
 
-  //     const changedStatus = banModal.status === 'Activated' ? 1 : 0;
-  //     console.log(changedStatus);
+  //   if (isClear) {
+  //     search = selectedStyles.filter((style) => style !== value);
+  //   } else {
+  //     search = [...selectedStyles, value];
+  //   }
 
-  //     changeStatusOfCustomer(banModal.selected, changedStatus)
-  //       .then((res) => {
-  //         dispatch(hideLoader());
-  //         NotificationManager.success(
-  //           banModal.status === 'Activated' ? SUCCESS.BAN_USER_SUCCESS : SUCCESS.UNBAN_USER_SUCCESS,
-  //           'Thành công',
-  //           1000
-  //         );
-  //         updateBanModal({
-  //           open: false,
-  //           selected: null,
-  //           status: null,
-  //         });
-  //         loadData();
-  //       })
-  //       .catch((err) => {
-  //         showStoreErrorMessage(err, dispatch);
-  //       });
-  //   };
+  //   setSelectedStyles(search);
+  // };
+
+  //  const banUser = () => {
+  //    if (openBanModal.selected == null || openBanModal.status == null) {
+  //      return;
+  //    }
+
+  //    dispatch(showLoader());
+
+  //    const changedStatus = openBanModal.status === 'Activated' ? 1 : 0;
+  //    console.log(changedStatus);
+
+  //    changeStatusOfArtist(openBanModal.selected, changedStatus)
+  //      .then((res) => {
+  //        dispatch(hideLoader());
+  //        NotificationManager.success(
+  //          openBanModal.status === 'Activated'
+  //            ? SUCCESS.BAN_USER_SUCCESS
+  //            : SUCCESS.UNBAN_USER_SUCCESS,
+  //          'Thành công',
+  //          1000
+  //        );
+  //        setOpenBanModal({
+  //          open: false,
+  //          selected: null,
+  //          status: null,
+  //        });
+  //        loadData();
+  //      })
+  //      .catch((err) => {
+  //        showStoreErrorMessage(err, dispatch);
+  //      });
+  //  };
 
   const columns = useMemo<Column[]>(
     () => [
@@ -111,18 +154,18 @@ const Customer = () => {
         accessor: 'name',
         Cell: ({ cell }) => {
           const { original } = cell.row;
-          const customer = original as Customer;
+          const artist = original as Artist;
 
           return (
             <div className="flex flex-row items-center">
               <div className="avatar hidden mr-3 md:block">
                 <div className="rounded-full w-10 h-10">
-                  <img src={customer.avatar} alt="User image" />
+                  <img src={artist.avatar} alt="User image" />
                 </div>
               </div>
 
               <div>
-                <p className="text-sm">{`${customer.lastName} ${customer.firstName}`}</p>
+                <p className="text-sm">{`${artist.lastName} ${artist.firstName}`}</p>
               </div>
             </div>
           );
@@ -132,6 +175,54 @@ const Customer = () => {
         Header: 'Username',
         accessor: 'username',
         Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
+      },
+      {
+        Header: 'Rating',
+        accessor: 'rate',
+        Cell: ({ cell: { value } }) => (
+          <div className="rating rating-sm">
+            <input
+              type="radio"
+              name="rating-6"
+              className={`mask mask-star-2 ${
+                value > 0 ? 'bg-yellow-200' : 'bg-gray-300'
+              }`}
+              disabled={true}
+            />
+            <input
+              type="radio"
+              name="rating-6"
+              className={`mask mask-star-2 ${
+                value > 1 ? 'bg-yellow-200' : 'bg-gray-300'
+              }`}
+              disabled={true}
+            />
+            <input
+              type="radio"
+              name="rating-6"
+              className={`mask mask-star-2 ${
+                value > 2 ? 'bg-yellow-200' : 'bg-gray-300'
+              }`}
+              disabled={true}
+            />
+            <input
+              type="radio"
+              name="rating-6"
+              className={`mask mask-star-2 ${
+                value > 3 ? 'bg-yellow-200' : 'bg-gray-300'
+              }`}
+              disabled={true}
+            />
+            <input
+              type="radio"
+              name="rating-6"
+              className={`mask mask-star-2 ${
+                value > 4 ? 'bg-yellow-200' : 'bg-gray-300'
+              }`}
+              disabled={true}
+            />
+          </div>
+        ),
       },
       {
         Header: 'Email',
@@ -191,11 +282,11 @@ const Customer = () => {
         defaultCanSort: false,
         Cell: ({ cell }) => {
           const { original } = cell.row;
-          const customer = original as Customer;
+          const artist = original as Artist;
 
           return (
             <div className="flex flex-row items-center text-gray-600">
-              <Link href={`/customer/${customer.id}`} passHref>
+              <Link href={`/artist/${artist.id}`} passHref>
                 <a className="btn btn-circle btn-outline border-0 btn-ghost">
                   <HiOutlinePencilAlt
                     className="w-6 h-6 cursor-pointer text-gray-600"
@@ -203,14 +294,14 @@ const Customer = () => {
                   />
                 </a>
               </Link>
-              {customer.status === 'Active' ? (
+              {artist.status === 'Active' ? (
                 <button
                   title="Ban user"
                   onClick={() =>
                     updateBanModal({
                       open: true,
-                      selected: customer.id,
-                      status: customer.status,
+                      selected: artist.id,
+                      status: artist.status,
                     })
                   }
                   className="btn btn-outline border-0 hover:bg-error-light hover:text-error text-gray-600 text-sm flex items-center gap-1"
@@ -224,8 +315,8 @@ const Customer = () => {
                   onClick={() =>
                     updateBanModal({
                       open: true,
-                      selected: customer.id,
-                      status: customer.status,
+                      selected: artist.id,
+                      status: artist.status,
                     })
                   }
                   className="btn btn-outline hover:bg-success border-0 text-gray-600 hover:text-success-dark text-sm flex items-center gap-1"
@@ -244,13 +335,10 @@ const Customer = () => {
 
   const closeBanModal = () => {
     updateBanModal({
+      ...banModal,
       open: false,
-      selected: null,
-      status: null,
     });
   };
-
-  useOnClickOutside(banModalRef, closeBanModal);
 
   return (
     <Layout>
@@ -280,12 +368,39 @@ const Customer = () => {
               onChange={null}
               width={'w-[13em]'}
             />
+            {/* country */}
+            <MultipleSelect
+              icon={<GoHome className="w-6 h-6 text-gray-500" />}
+              name="Country"
+              data={[]}
+              value={null}
+              onChange={null}
+              width={'w-[13em]'}
+            />
+            {/* voice style */}
+            <MultipleSelect
+              icon={<BiUserVoice className="w-6 h-6 text-gray-500" />}
+              name="Voice Style"
+              data={[]}
+              value={null}
+              onChange={null}
+              width={'w-[13em]'}
+            />
+            {/* rating */}
+            <MultipleSelect
+              icon={<BsStar className="w-6 h-6 text-gray-500" />}
+              name="Rating"
+              data={ratingList}
+              value={null}
+              onChange={null}
+              width={'w-[13em]'}
+            />
           </div>
+        </div>
 
-          <div className="border-t-2 border-gray-100">
-            {/* table */}
-            <Table columns={columns} data={data} total={totalResults} />
-          </div>
+        <div className="border-t-2 border-gray-100">
+          {/* table */}
+          <Table columns={columns} data={data} total={totalResults} />
         </div>
       </div>
 
@@ -319,4 +434,4 @@ const Customer = () => {
   );
 };
 
-export default Customer;
+export default Artist;

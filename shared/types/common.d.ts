@@ -3,6 +3,12 @@ type DateRangeType = {
   endDate: Date;
 };
 
+type BanModalType = {
+  open: boolean;
+  selected: string | null;
+  status: string | null;
+};
+
 type StatusType = {
   name: string;
   label: string;
