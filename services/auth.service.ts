@@ -7,10 +7,7 @@ export const loginService = (username: string, password: string) => {
     username,
     password,
   }).then((res) => {
-    if (res.data.data.token) {
-      localStorage.setItem('user', JSON.stringify(res.data.data));
-    }
-
+    console.log(res);
     return res.data;
   });
 };

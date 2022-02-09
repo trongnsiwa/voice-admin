@@ -1,4 +1,5 @@
 import { toggleSidebar } from '@redux/actions/sidebar-action';
+import { sidebarSelector } from '@redux/selectors';
 import { useAppDispatch, useAppSelector } from '@redux/store/hooks';
 import { sidebars } from '@shared/routes/sidebar';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -11,7 +12,7 @@ const Sidebar = () => {
   const router = useRouter();
 
   // selctor & dispatch
-  const { open } = useAppSelector((state) => state.sidebar);
+  const open = useAppSelector(sidebarSelector);
   const dispatch = useAppDispatch();
 
   // media query

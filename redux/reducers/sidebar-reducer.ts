@@ -1,14 +1,16 @@
-import { TOGGLE_SIDEBAR } from '@constants/action-types';
+import { createReducer } from '@reduxjs/toolkit';
+import { toggleSidebar } from '../actions';
 
-const initialState = {
+type SidebarState = {
+  open: boolean;
+};
+
+const initialState: SidebarState = {
   open: true,
 };
 
-export default function sidebarReducer(state = initialState, action: any) {
-  switch (action.type) {
-    case TOGGLE_SIDEBAR:
-      return { open: action.open };
-    default:
-      return state;
-  }
-}
+export const sidebarReducer = createReducer(initialState, (builder) => {
+  builder.addCase(toggleSidebar, (state, action) => {
+    state.open = action.payload;
+  });
+});

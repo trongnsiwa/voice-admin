@@ -1,15 +1,17 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
-import sidebarReducer from '../reducers/sidebar-reducer';
-import authReducer from '../reducers/auth-reducer';
-import loaderReducer from '../reducers/loader-reducer';
-import messageReducer from '../reducers/message-reducer';
+import {
+  authReducer,
+  loaderReducer,
+  messageReducer,
+  sidebarReducer,
+} from '../reducers';
 
 export const store = configureStore({
   reducer: {
+    loader: loaderReducer,
     sidebar: sidebarReducer,
     auth: authReducer,
-    loader: loaderReducer,
     mess: messageReducer,
   },
 });

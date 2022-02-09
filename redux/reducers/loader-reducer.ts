@@ -1,20 +1,20 @@
-import { HIDE_LOADER, SHOW_LOADER } from '@constants/action-types';
+import { createReducer } from '@reduxjs/toolkit';
+import { hideLoader, showLoader } from '../actions';
 
-const initialState = {
+type LoaderState = {
+  loading: boolean;
+};
+
+const initialState: LoaderState = {
   loading: false,
 };
 
-export default function loaderReducer(state = initialState, action: any) {
-  switch (action.type) {
-    case SHOW_LOADER:
-      return {
-        loading: true,
-      };
-    case HIDE_LOADER:
-      return {
-        loading: false,
-      };
-    default:
-      return state;
-  }
-}
+export const loaderReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(showLoader, (state) => {
+      state.loading = true;
+    })
+    .addCase(hideLoader, (state) => {
+      state.loading = false;
+    });
+});

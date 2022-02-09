@@ -1,19 +1,15 @@
-import { logoutAction } from '@redux/actions/auth-action';
 import { useAppDispatch, useAppSelector } from '@redux/store/hooks';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 
 import { RiMenu2Line } from 'react-icons/ri';
-import { VscBell, VscBellDot } from 'react-icons/vsc';
+import { VscBell } from 'react-icons/vsc';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  useBoolean,
-  useMediaQuery,
-  useOnClickOutside,
-  useWindowSize,
-} from 'usehooks-ts';
+import { useBoolean, useMediaQuery, useOnClickOutside } from 'usehooks-ts';
 import { toggleSidebar } from '@redux/actions/sidebar-action';
+import { sidebarSelector } from '@redux/selectors';
+import { logoutAction } from '@redux/actions';
 
 const Header = () => {
   // states
@@ -23,7 +19,7 @@ const Header = () => {
   const menuRef = useRef(null);
 
   // selectors
-  const { open } = useAppSelector((state) => state.sidebar);
+  const open = useAppSelector(sidebarSelector);
 
   // dispatch
   const dispatch = useAppDispatch();
@@ -34,10 +30,9 @@ const Header = () => {
   const matches = useMediaQuery('(min-width: 1440px)');
 
   const logOut = () => {
-    // dispatch(logoutAction());
-    // router.push('/signin');
-    // router.reload();
-    console.log('hi');
+    dispatch(logoutAction());
+    router.replace('/login');
+    router.reload();
   };
 
   useOnClickOutside(menuRef, setFalse);

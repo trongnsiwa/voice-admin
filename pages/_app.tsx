@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import '@shared/styles/global.css';
 import '@shared/styles/nprocess.css';
+import '@shared/styles/loader.css';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { store } from '@redux/store/store';
@@ -19,12 +20,12 @@ const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
         <TopProgressBar />
         <Component {...pageProps} />
-      </Provider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </Provider>
   );
 }
 

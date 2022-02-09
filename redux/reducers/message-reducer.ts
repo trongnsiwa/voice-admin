@@ -1,18 +1,21 @@
-import { CLEAR_MESSAGE, SET_MESSAGE } from '@constants/action-types';
+import { clearMessage, setMessage } from '@redux/actions';
+import { createReducer } from '@reduxjs/toolkit';
 
-const initialState = {
-  message: '',
+export type MessageType = {
+  messsage: string;
 };
 
-export default function messageReducer(state = initialState, action: any) {
-  const { type, payload } = action;
+const initialState: MessageType = {
+  messsage: '',
+};
 
-  switch (type) {
-    case SET_MESSAGE:
-      return { message: payload };
-    case CLEAR_MESSAGE:
-      return { message: '' };
-    default:
-      return state;
-  }
-}
+export const messageReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(setMessage, (state, action) => {
+      state.messsage = action.payload;
+      console.log(action.payload);
+    })
+    .addCase(clearMessage, (state) => {
+      state.messsage = '';
+    });
+});

@@ -1,48 +1,48 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
+import authHeader from './auth-header';
 
-const client = axios.create({
-  baseURL: 'https://api.voiceplatform.social/api/v1',
-});
-
-const request = ({ ...options }) => {
-  const user = JSON.parse(localStorage.getItem('user') as any);
-
-  client.defaults.headers.common.Authorization = 'Bearer ' + user.token;
-  client.defaults.headers.post['Content-Type'] =
-    'application/json;charset=UTF-8';
-
-  const onSuccess = (response: AxiosResponse) => response;
-  const onError = (error: AxiosError) => {
-    return error;
-  };
-
-  return client(options).then(onSuccess).catch(onError);
-};
+const endpoint = 'https://dev.api.vocal.vn/api/v1';
 
 export const get = (url: string) => {
-  return request({ url, method: 'get' });
+  return axios.get(endpoint + url, {
+    headers: authHeader(),
+  });
 };
 
 export const getWithParams = (url: string, params: any) => {
-  return request({ url, method: 'get', params });
+  return axios.get(endpoint + url, {
+    headers: authHeader(),
+    params: params,
+  });
 };
 
-export const post = (url: string, data: any) => {
-  return request({ url, method: 'post', data });
+export const post = (url: string, body: any) => {
+  return axios.post(endpoint + url, body, {
+    headers: authHeader(),
+  });
 };
 
-export const postWithParams = (url: string, data: any, params?: any) => {
-  return request({ url, method: 'post', params, data });
+export const postWithParams = (url: string, body: any, params?: any) => {
+  return axios.post(endpoint + url, body, {
+    headers: authHeader(),
+    params: params,
+  });
 };
 
-export const put = (url: string, data: any) => {
-  return request({ url, method: 'put', data });
+export const put = (url: string, body: any) => {
+  return axios.put(endpoint + url, body, {
+    headers: authHeader(),
+  });
 };
 
-export const patch = (url: string, data: any) => {
-  return request({ url, method: 'patch', data });
+export const patch = (url: string, body: any) => {
+  return axios.patch(endpoint + url, body, {
+    headers: authHeader(),
+  });
 };
 
 export const del = (url: string) => {
-  return request({ url, method: 'delete' });
+  return axios.delete(endpoint + url, {
+    headers: authHeader(),
+  });
 };

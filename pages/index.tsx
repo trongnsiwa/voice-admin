@@ -1,15 +1,20 @@
 import Layout from '@components/layouts/layout';
+import { authSelector, selectAuth } from '@redux/selectors';
 import { useAppSelector } from '@redux/store/hooks';
 import type { NextPage } from 'next';
-import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import Login from './login';
 
 const Home: NextPage = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isLoggedIn } = useAppSelector(authSelector);
+  const router = useRouter();
 
-  // if (!user || user.isLoggedIn === false) {
-  //   return <Login />;
-  // }
+  useEffect(() => {
+    if (!user || isLoggedIn === false) {
+      router.replace('/login');
+    }
+  }, []);
 
   return (
     <Layout>

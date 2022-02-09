@@ -1,61 +1,42 @@
+import { setMessage } from '@redux/actions';
+import { loginService } from '@services/auth.service';
+import { createAction } from '@reduxjs/toolkit';
+import { AppDispatch } from '@redux/store/store';
+import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT } from '@constants/action-types';
 import { ERRORS } from '@constants/error-code';
-import {
-  SET_MESSAGE,
-  LOGIN_FAIL,
-  LOGIN_SUCCESS,
-  LOGOUT,
-} from '@constants/action-types';
-import { hideLoader } from './loader-action';
-import { loginService, logoutService } from '@services/auth.service';
-import { AppDispatch } from '../store/store';
 
-export const loginAction =
+export const login =
   (username: string, password: string) => (dispatch: AppDispatch) => {
     return loginService(username, password).then(
       (data) => {
         if (!data) {
-          dispatch({
-            type: LOGIN_FAIL,
-          });
+          dispatch(loginFailAction);
 
-          dispatch({
-            type: SET_MESSAGE,
-            payload: ERRORS.ERR_LOGIN_FAIL,
-          });
+          dispatch(setMessage(ERRORS.ERR_LOGIN_FAIL));
 
           return Promise.reject();
         }
 
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: { user: data },
-        });
+        dispatch(loginSuccessAction({ user: data }));
 
         return Promise.resolve();
       },
       (error) => {
-        const messages = error.response && error.response.data;
+        const messages = error.response;
 
-        dispatch({
-          type: LOGIN_FAIL,
-        });
+        dispatch(loginFailAction);
 
-        dispatch({
-          type: SET_MESSAGE,
-          payload: ERRORS[messages[0].message],
-        });
+        console.log(messages.data.data);
+
+        // dispatch(setMessage(ERRORS[messages.data.data]));
+        dispatch(setMessage(ERRORS.ERR_LOGIN_FAIL));
 
         return Promise.reject();
       }
     );
   };
 
-export const logoutAction = () => (dispatch: AppDispatch) => {
-  logoutService();
+export const loginSuccessAction = createAction<{ user: any }>(LOGIN_SUCCESS);
+export const loginFailAction = createAction(LOGIN_FAIL);
 
-  dispatch({
-    type: LOGOUT,
-  });
-
-  dispatch(hideLoader());
-};
+export const logoutAction = createAction(LOGOUT);
