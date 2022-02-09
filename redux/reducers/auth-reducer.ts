@@ -25,10 +25,10 @@ export const authReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loginSuccessAction, (state, { payload }) => {
       state.isLoggedIn = true;
-      state.user = payload;
+      state.user = payload.user;
 
       if (typeof window !== 'undefined') {
-        localStorage.setItem('user', JSON.stringify(payload));
+        localStorage.setItem('user', JSON.stringify(payload.user));
       }
     })
     .addCase(loginFailAction, (state, { payload }) => {

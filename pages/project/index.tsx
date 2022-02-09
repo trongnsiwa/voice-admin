@@ -1,89 +1,109 @@
 import Layout from '@components/layouts/layout';
 import SearchBar from '@components/search-bar';
 import MultipleSelect from '@components/multiple-select';
-import { ProjectFilter } from '@services/project.service';
+import { getProjects } from '@services/project.service';
 import DatePicker from '@components/date-range-picker';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { BsTags } from 'react-icons/bs';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { GiAges } from 'react-icons/gi';
-import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 
 import Table from '@components/table';
-import { ageList, priceList, Project, projects } from 'models/project.model';
+import { ageList, Project } from 'models/project.model';
 import dayjs from 'dayjs';
 import {
   getLabelByStatus,
   projectStatusList,
-  statusColor,
 } from 'models/project-status.model';
 import { Column } from 'react-table';
 import Link from 'next/link';
 import classNames from 'classnames';
+import { useQuery } from 'react-query';
 
 const Project = () => {
-  // created date
+  // filter
+  const [filterStatusList, setFilterStatusList] = useState<string[]>([]);
+  const [filterAgeList, setFilterAgeList] = useState<string[]>([]);
   const [selectionRange, setSelectionRange] = useState<DateRangeType>({
     startDate: new Date(),
     endDate: new Date(),
   });
 
-  // filter
-  // const [filter, setFilter] = useState<ProjectFilter>({
-  //   Status: null,
-  //   CreateDate: null,
-  // });
+  // sort
   const [sortObj, setSortObj] = useState<any>(null);
 
   // search
   const [searchBy, setSearchBy] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 10;
   const [totalResults, setTotalResults] = useState(0);
 
-  // const loadData = () => {
-  //   var dateCreated = null;
-  //   if (filterObj.CreateDate != null) {
-  //     dateCreated = new Date(
-  //       new Date(filterObj.CreateDate).setHours(0, 0, 0, 0)
-  //     );
-  //     dateCreated = new Date(
-  //       dateCreated.getTime() - dateCreated.getTimezoneOffset() * 60000
-  //     ).toJSON();
-  //   }
+  function onPageChange(p: any) {
+    setPageNumber(p);
+  }
 
-  //   getProjects(page, resultsPerPage, searchBy, sortObj, {
-  //     ...filterObj,
-  //     CreateDate: dateCreated,
-  //   })
-  //     .then((res) => {
-  //       if (res.data) {
-  //         setData(res.data.data);
-  //         setTotalResults(res.data.totalRow);
-  //       } else {
-  //         setData([]);
-  //         setTotalResults(0);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setData([]);
-  //       setTotalResults(0);
-  //     });
-  // };
+  const { isLoading, error, data, isSuccess } = useQuery(
+    [
+      'fetchProjects',
+      pageNumber,
+      searchBy,
+      sortObj,
+      selectionRange,
+      filterStatusList,
+      filterAgeList,
+    ],
+    () => {
+      let createdStartDate = null;
+      let createdEndDate = null;
 
-  // useEffect(() => {
-  //   // setData(projects.slice((page - 1) * resultsPerPage, page * resultsPerPage));
+      if (selectionRange.startDate != null) {
+        createdStartDate = new Date(
+          new Date(selectionRange.startDate).setHours(0, 0, 0, 0)
+        );
+        createdStartDate = new Date(
+          createdStartDate.getTime() -
+            createdStartDate.getTimezoneOffset() * 60000
+        ).toJSON();
+      }
 
-  //   loadData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [page, searchBy, sortObj, filterObj]);
+      if (selectionRange.endDate != null) {
+        createdEndDate = new Date(
+          new Date(selectionRange.endDate).setHours(0, 0, 0, 0)
+        );
+        createdEndDate = new Date(
+          createdEndDate.getTime() - createdEndDate.getTimezoneOffset() * 60000
+        ).toJSON();
+      }
 
-  // function onPageChange(p: any) {
-  //   setPage(p);
-  // }
+      return getProjects(
+        pageNumber,
+        pageSize,
+        searchBy,
+        sortObj,
+        createdStartDate,
+        createdEndDate,
+        filterStatusList,
+        filterAgeList
+      );
+    },
+    {
+      keepPreviousData: true,
+      staleTime: Infinity,
+    }
+  );
+
+  useEffect(() => {
+    if (data && !error) {
+      setTotalResults(data.data.totalRow);
+      console.log(data);
+    } else {
+      setTotalResults(0);
+    }
+  }, [data, error]);
 
   // table
-  const [data, setData] = useState<Project[]>(projects);
   const columns = useMemo<Column[]>(
     () => [
       {
@@ -137,11 +157,6 @@ const Project = () => {
             </span>
           );
         },
-      },
-      {
-        Header: 'Price',
-        accessor: 'price',
-        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
       },
       {
         Header: 'Response',
@@ -255,22 +270,27 @@ const Project = () => {
               onChange={null}
               width={'w-[15em]'}
             />
-            {/* price */}
-            <MultipleSelect
-              icon={<FaRegMoneyBillAlt className="w-6 h-6 text-gray-500" />}
-              name="Price"
-              data={priceList}
-              value={null}
-              onChange={null}
-              width={'w-[18em]'}
-            />
           </div>
         </div>
 
-        <div className="border-t-2 border-gray-100">
-          {/* table */}
-          <Table columns={columns} data={data} total={totalResults} />
-        </div>
+        {isLoading ? (
+          <>...Loading</>
+        ) : isSuccess ? (
+          <>
+            <div className="border-t-2 border-gray-100">
+              {/* table */}
+              <Table
+                columns={columns}
+                data={data?.data.data}
+                total={totalResults}
+                isSuccess={isSuccess}
+                queryPageIndex={pageNumber}
+                queryPageSize={pageSize}
+                setSortObj={setSortObj}
+              />
+            </div>
+          </>
+        ) : null}
       </div>
     </Layout>
   );

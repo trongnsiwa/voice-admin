@@ -1,11 +1,18 @@
 import Header from '@components/common/header';
 import Sidebar from '@components/common/sidebar';
-import Loader from '@components/loader';
 import { authSelector } from '@redux/selectors';
 import { useAppSelector } from '@redux/store/hooks';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
+
+const TopProgressBar = dynamic(
+  () => {
+    return import('@components/top-progress-bar');
+  },
+  { ssr: false }
+);
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
@@ -35,6 +42,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <main className="w-[1640px]">{children}</main>
         </div>
       </div>
+
+      <TopProgressBar />
     </>
   );
 };

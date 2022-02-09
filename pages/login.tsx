@@ -45,11 +45,10 @@ const Login = () => {
 
     dispatch(showLoader());
 
-    dispatch(login(username, password))
+    login(username, password, dispatch)
       .then(() => {
         resetForm();
-        router.replace('/');
-        router.reload();
+        router.push('/');
       })
       .catch((error) => dispatch(hideLoader()));
   };

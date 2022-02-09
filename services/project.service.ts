@@ -1,17 +1,15 @@
 import { get, getWithParams, put } from '@shared/libs/http-helper';
 const API_URL = '/projects';
 
-export interface ProjectFilter {
-  Status: string | null;
-  CreateDate: string | null;
-}
-
 export const getProjects = (
   pageNumber: number,
   pageSize: number,
   searchString: string,
   sort: any,
-  filter: ProjectFilter
+  createdStartDate: string | null,
+  createdEndDate: string | null,
+  filterStatusList: string[],
+  filterAgeList: string[]
 ) => {
   return get(
     `${API_URL}?pageNumber=${pageNumber}&pageSize=${pageSize}${
@@ -23,12 +21,12 @@ export const getProjects = (
         ? '&sort[CreateDate]=' + sort.CreateDate
         : ''
     }${sort && sort.Status != null ? '&sort[Email]=' + sort.Status : ''}${
-      filter.Status != null && filter.Status !== ''
-        ? '&filter[Status]=' + filter.Status
+      filterStatusList.length > 0
+        ? filterStatusList.map((status) => '&filter[Status]=' + status).join('')
         : ''
     }${
-      filter.CreateDate != null && filter.CreateDate !== ''
-        ? '&filter[CreateDate]=' + filter.CreateDate
+      filterAgeList.length > 0
+        ? filterAgeList.map((age) => '&filter[Age]=' + age).join('')
         : ''
     }`
   );

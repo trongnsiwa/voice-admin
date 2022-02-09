@@ -31,8 +31,7 @@ const Header = () => {
 
   const logOut = () => {
     dispatch(logoutAction());
-    router.replace('/login');
-    router.reload();
+    router.push('/login');
   };
 
   useOnClickOutside(menuRef, setFalse);

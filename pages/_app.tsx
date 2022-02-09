@@ -6,15 +6,7 @@ import '@shared/styles/loader.css';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { store } from '@redux/store/store';
-import dynamic from 'next/dynamic';
 import { QueryClient, QueryClientProvider } from 'react-query';
-
-const TopProgressBar = dynamic(
-  () => {
-    return import('@components/top-progress-bar');
-  },
-  { ssr: false }
-);
 
 const queryClient = new QueryClient();
 
@@ -22,7 +14,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <TopProgressBar />
         <Component {...pageProps} />
       </QueryClientProvider>
     </Provider>

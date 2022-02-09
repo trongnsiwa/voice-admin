@@ -4,15 +4,14 @@ import { useAppSelector } from '@redux/store/hooks';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Login from './login';
 
 const Home: NextPage = () => {
   const { user, isLoggedIn } = useAppSelector(authSelector);
   const router = useRouter();
 
   useEffect(() => {
-    if (!user || isLoggedIn === false) {
-      router.replace('/login');
+    if (!user || !isLoggedIn) {
+      router.push('/login');
     }
   }, []);
 

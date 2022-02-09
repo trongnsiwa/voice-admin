@@ -2,6 +2,7 @@ import { usePagination, useSortBy, useTable } from 'react-table';
 import { BsSortDown, BsSortUp, BsTags } from 'react-icons/bs';
 import MultipleSelect from './multiple-select';
 import { useAppSelector } from '@redux/store/hooks';
+import { Dispatch, SetStateAction } from 'react';
 
 interface TableProps {
   columns: any;
@@ -12,6 +13,10 @@ interface TableProps {
   statusList?: any[];
   notFoundMessage?: string;
   hasBottom?: boolean;
+  isSuccess: boolean;
+  queryPageIndex: number;
+  queryPageSize: number;
+  setSortObj: Dispatch<SetStateAction<any>>;
 }
 
 const Table = ({
@@ -23,12 +28,24 @@ const Table = ({
   statusList,
   notFoundMessage = 'No Result Found',
   hasBottom = true,
+  isSuccess = false,
+  queryPageIndex,
+  queryPageSize,
+  setSortObj,
 }: TableProps) => {
   const { open } = useAppSelector((state) => state.sidebar);
 
   const tableInstance = useTable(
-    { columns, data, manualPagination: true },
-    useSortBy,
+    {
+      columns,
+      data: isSuccess ? data : [],
+      initialState: {
+        pageIndex: queryPageIndex,
+        pageSize: queryPageSize,
+      },
+      manualPagination: true,
+      pageCount: total,
+    },
     usePagination
   );
 
@@ -117,9 +134,7 @@ const Table = ({
         <thead>
           <tr>
             {headers.map((column, index) => {
-              const { key, ...restHeaderProps } = column.getHeaderProps(
-                column.getSortByToggleProps()
-              );
+              const { key, ...restHeaderProps } = column.getHeaderProps();
 
               return (
                 <th
