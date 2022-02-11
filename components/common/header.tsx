@@ -8,7 +8,7 @@ import { IoLogOutOutline } from 'react-icons/io5';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBoolean, useMediaQuery, useOnClickOutside } from 'usehooks-ts';
 import { toggleSidebar } from '@redux/actions/sidebar-action';
-import { sidebarSelector } from '@redux/selectors';
+import { authSelector, sidebarSelector } from '@redux/selectors';
 import { logoutAction } from '@redux/actions';
 
 const Header = () => {
@@ -20,6 +20,7 @@ const Header = () => {
 
   // selectors
   const open = useAppSelector(sidebarSelector);
+  const { user } = useAppSelector(authSelector);
 
   // dispatch
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ const Header = () => {
   return (
     <AnimatePresence initial={false}>
       <div
-        className={`mb-2 shadow-lg px-3 fixed ${
+        className={`mb-2 bg-white z-50 shadow-lg px-3 fixed ${
           !open ? 'w-[calc(100%-80px)]' : 'w-[calc(100%-280px)]'
         }`}
       >
@@ -60,12 +61,15 @@ const Header = () => {
               <RiMenu2Line className="inline-block w-6 h-6" />
             </label>
           </div>
-          <div className="flex-none">
+          <div className="flex-none pr-3">
             <button className="btn btn-circle btn-ghost">
               <VscBell className="inline-block w-6 h-6" />
             </button>
           </div>
-          <div className="flex-none relative">
+          <div className="flex-none relative border-l h-7">
+            <p className={`px-3 text-sm font-semibold text-voice-ylw_dark`}>
+              {user?.firstName} {user?.lastName}
+            </p>
             <div
               className="avatar cursor-pointer"
               onClick={toggle}
@@ -88,7 +92,7 @@ const Header = () => {
                 },
               }}
               transition={{ duration: 0.1, easings: ['easeOut', 'easeIn'] }}
-              className="menu w-[10em] py-3 shadow-md bg-base-100 rounded-sm absolute left-[-7em] bottom-[-5em]"
+              className="menu w-[10em] py-3 shadow-sm bg-base-100 rounded-sm absolute right-0 bottom-[-5em]"
             >
               <li>
                 <a onClick={logOut}>

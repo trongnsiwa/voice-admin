@@ -5,10 +5,7 @@ import { DateRangePicker } from 'react-date-range';
 interface DateRangePickerProps {
   icon: ReactElement;
   name: string;
-  selectionRange: {
-    startDate: Date;
-    endDate: Date;
-  };
+  selectionRange: DateRangeType;
   onChange: any;
 }
 

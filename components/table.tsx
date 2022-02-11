@@ -1,8 +1,9 @@
-import { usePagination, useSortBy, useTable } from 'react-table';
+import { usePagination, useTable } from 'react-table';
 import { BsSortDown, BsSortUp, BsTags } from 'react-icons/bs';
 import MultipleSelect from './multiple-select';
 import { useAppSelector } from '@redux/store/hooks';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import LoadingSpinner from './loading-spinner';
 
 interface TableProps {
   columns: any;
@@ -15,8 +16,11 @@ interface TableProps {
   hasBottom?: boolean;
   isSuccess: boolean;
   queryPageIndex: number;
+  setQueryPageIndex: Dispatch<SetStateAction<number>>;
   queryPageSize: number;
+  setQueryPageSize: Dispatch<SetStateAction<number>>;
   setSortObj: Dispatch<SetStateAction<any>>;
+  isLoading: boolean;
 }
 
 const Table = ({
@@ -30,8 +34,11 @@ const Table = ({
   hasBottom = true,
   isSuccess = false,
   queryPageIndex,
+  setQueryPageIndex,
   queryPageSize,
+  setQueryPageSize,
   setSortObj,
+  isLoading = false,
 }: TableProps) => {
   const { open } = useAppSelector((state) => state.sidebar);
 
@@ -44,7 +51,7 @@ const Table = ({
         pageSize: queryPageSize,
       },
       manualPagination: true,
-      pageCount: total,
+      pageCount: isSuccess ? Math.ceil(total / queryPageSize) : 0,
     },
     usePagination
   );
@@ -56,7 +63,6 @@ const Table = ({
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
     pageCount,
     gotoPage,
     nextPage,
@@ -66,18 +72,27 @@ const Table = ({
     prepareRow,
   } = tableInstance;
 
+  useEffect(() => {
+    setQueryPageIndex(pageIndex + 1);
+  }, [pageIndex, previousPage, nextPage, gotoPage]);
+
+  useEffect(() => {
+    setQueryPageSize(pageSize);
+    gotoPage(0);
+  }, [pageSize]);
+
   const paginationButtons = (
     <div>
       <button
         onClick={() => gotoPage(0)}
-        disabled={!canPreviousPage}
+        disabled={!canPreviousPage || isLoading}
         className="btn btn-sm"
       >
         {'<<'}
       </button>{' '}
       <button
         onClick={() => previousPage()}
-        disabled={!canPreviousPage}
+        disabled={!canPreviousPage || isLoading}
         className="btn btn-sm"
       >
         {'<'}
@@ -85,14 +100,14 @@ const Table = ({
       <span className="px-3">{pageIndex + 1}</span>{' '}
       <button
         onClick={() => nextPage()}
-        disabled={!canNextPage}
+        disabled={!canNextPage || isLoading}
         className="btn btn-sm"
       >
         {'>'}
       </button>{' '}
       <button
         onClick={() => gotoPage(pageCount - 1)}
-        disabled={!canNextPage}
+        disabled={!canNextPage || isLoading}
         className="btn btn-sm"
       >
         {'>>'}
@@ -104,11 +119,15 @@ const Table = ({
     <div className="overflow-x-auto">
       <div className="w-full flex items-center justify-between py-3 px-10">
         <span>
-          Showing {pageSize * pageIndex + 1} -{' '}
-          {total < pageSize * pageIndex + pageSize
-            ? total
-            : pageSize * pageIndex + pageSize}{' '}
-          of {total} results
+          {!isLoading
+            ? `Showing ${pageSize * pageIndex + 1} - 
+          ${
+            total < pageSize * pageIndex + pageSize
+              ? total
+              : pageSize * pageIndex + pageSize
+          } 
+          of ${total} results`
+            : null}
         </span>
         <div className="flex items-center gap-3 text-gray-600 text-sm">
           Results per page
@@ -170,7 +189,13 @@ const Table = ({
           </tr>
         </thead>
         <tbody key={'body'} {...getTableBodyProps()}>
-          {page.length > 0 ? (
+          {isLoading ? (
+            <tr>
+              <td colSpan={headers.length} className="p-10">
+                <LoadingSpinner />
+              </td>
+            </tr>
+          ) : data?.length > 0 || page.length > 0 || isSuccess ? (
             page.map((row) => {
               prepareRow(row);
 
@@ -183,7 +208,11 @@ const Table = ({
                       const { key, ...restCellProps } = cell.getCellProps();
 
                       return (
-                        <td key={key} {...restCellProps} className="px-10">
+                        <td
+                          key={`cell_${key}`}
+                          {...restCellProps}
+                          className="px-10"
+                        >
                           {cell.render('Cell')}
                         </td>
                       );
@@ -229,7 +258,7 @@ const Table = ({
             {paginationButtons}
             {isDetail && statusList && statusList.length > 0 && (
               <div>
-                <MultipleSelect
+                {/* <MultipleSelect
                   icon={<BsTags className="w-6 h-6 text-gray-500" />}
                   name="Status"
                   data={statusList}
@@ -238,7 +267,7 @@ const Table = ({
                   width={'w-[15em]'}
                   isDetail={isDetail}
                   hasBottom={hasBottom}
-                />
+                /> */}
               </div>
             )}
           </div>

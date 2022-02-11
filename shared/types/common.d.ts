@@ -1,6 +1,6 @@
 type DateRangeType = {
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
 };
 
 type BanModalType = {
@@ -20,8 +20,7 @@ type RatingType = {
 };
 
 type AgeType = {
-  startAge: number;
-  endAge: number;
+  name: string;
   label: string;
 };
 

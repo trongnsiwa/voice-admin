@@ -15,12 +15,12 @@ export interface Project {
 }
 
 export const ageList = <AgeType[]>[
-  { startAge: 18, endAge: 25, label: '15 - 25 years old' },
-  { startAge: 26, endAge: 33, label: '26 - 33 years old' },
-  { startAge: 34, endAge: 41, label: '34 - 41 years old' },
-  { startAge: 42, endAge: 49, label: '42 - 49 years old' },
-  { startAge: 50, endAge: 57, label: '50 - 57 years old' },
-  { startAge: 57, endAge: 64, label: '57 - 64 years old' },
+  { name: '15 - 25', label: '15 - 25 years old' },
+  { name: '26 - 33', label: '26 - 33 years old' },
+  { name: '34 - 41', label: '34 - 41 years old' },
+  { name: '42 - 49', label: '42 - 49 years old' },
+  { name: '50 - 57', label: '50 - 57 years old' },
+  { name: '57 - 64', label: '57 - 64 years old' },
 ];
 
 export const priceList = <PriceType[]>[

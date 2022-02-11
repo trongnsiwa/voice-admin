@@ -21,6 +21,7 @@ import { Column } from 'react-table';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { useQuery } from 'react-query';
+import { RangeKeyDict } from 'react-date-range';
 
 const Project = () => {
   // filter
@@ -37,17 +38,14 @@ const Project = () => {
   // search
   const [searchBy, setSearchBy] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
   const [totalResults, setTotalResults] = useState(0);
 
-  function onPageChange(p: any) {
-    setPageNumber(p);
-  }
-
-  const { isLoading, error, data, isSuccess } = useQuery(
+  const { isLoading, error, data, isSuccess, isFetching } = useQuery(
     [
       'fetchProjects',
       pageNumber,
+      pageSize,
       searchBy,
       sortObj,
       selectionRange,
@@ -97,11 +95,34 @@ const Project = () => {
   useEffect(() => {
     if (data && !error) {
       setTotalResults(data.data.totalRow);
-      console.log(data);
     } else {
       setTotalResults(0);
     }
   }, [data, error]);
+
+  const filterStatus = (value: string, isClear: boolean) => {
+    let search: string[] = [];
+
+    if (isClear) {
+      search = filterStatusList.filter((status: string) => status !== value);
+    } else {
+      search = [...filterStatusList, value];
+    }
+
+    setFilterStatusList(search);
+  };
+
+  const filterAge = (value: string, isClear: boolean) => {
+    let search: string[] = [];
+
+    if (isClear) {
+      search = filterAgeList.filter((age: string) => age !== value);
+    } else {
+      search = [...filterAgeList, value];
+    }
+
+    setFilterAgeList(search);
+  };
 
   // table
   const columns = useMemo<Column[]>(
@@ -249,7 +270,12 @@ const Project = () => {
             <DatePicker
               icon={<MdOutlineDateRange className="w-6 h-6 text-gray-500" />}
               name="Created Date"
-              onChange={null}
+              onChange={(value: RangeKeyDict) => {
+                setSelectionRange({
+                  startDate: value.range1.startDate,
+                  endDate: value.range1.endDate,
+                });
+              }}
               selectionRange={selectionRange}
             />
             {/* status */}
@@ -257,8 +283,9 @@ const Project = () => {
               icon={<BsTags className="w-6 h-6 text-gray-500" />}
               name="Status"
               data={projectStatusList}
-              value={null}
-              onChange={null}
+              selectedList={filterStatusList}
+              filter={filterStatus}
+              setPage={setPageNumber}
               width={'w-[13em]'}
             />
             {/* age */}
@@ -266,31 +293,29 @@ const Project = () => {
               icon={<GiAges className="w-6 h-6 text-gray-500" />}
               name="Age"
               data={ageList}
-              value={null}
-              onChange={null}
+              selectedList={filterAgeList}
+              filter={filterAge}
+              setPage={setPageNumber}
               width={'w-[15em]'}
             />
           </div>
         </div>
 
-        {isLoading ? (
-          <>...Loading</>
-        ) : isSuccess ? (
-          <>
-            <div className="border-t-2 border-gray-100">
-              {/* table */}
-              <Table
-                columns={columns}
-                data={data?.data.data}
-                total={totalResults}
-                isSuccess={isSuccess}
-                queryPageIndex={pageNumber}
-                queryPageSize={pageSize}
-                setSortObj={setSortObj}
-              />
-            </div>
-          </>
-        ) : null}
+        <div className="border-t-2 border-gray-100">
+          {/* table */}
+          <Table
+            columns={columns}
+            data={data?.data.data}
+            total={totalResults}
+            isSuccess={isSuccess}
+            queryPageIndex={pageNumber - 1}
+            setQueryPageIndex={setPageNumber}
+            queryPageSize={pageSize}
+            setQueryPageSize={setPageSize}
+            setSortObj={setSortObj}
+            isLoading={isLoading || isFetching}
+          />
+        </div>
       </div>
     </Layout>
   );

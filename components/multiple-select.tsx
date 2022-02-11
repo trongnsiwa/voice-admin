@@ -1,12 +1,13 @@
 import { Popover, Transition } from '@headlessui/react';
-import { Fragment, ReactElement, useState } from 'react';
+import { Dispatch, Fragment, ReactElement, SetStateAction } from 'react';
 
 interface MultipleSelectProps {
   icon: ReactElement;
   name: string;
   data: any[];
-  value: string | null;
-  onChange: any;
+  selectedList: string[];
+  filter: (value: string, isClear: boolean) => void;
+  setPage: Dispatch<SetStateAction<number>>;
   width: any;
   isDetail?: boolean;
   hasBottom?: boolean;
@@ -16,8 +17,9 @@ const MultipleSelect = ({
   icon,
   name,
   data,
-  value,
-  onChange,
+  selectedList,
+  filter,
+  setPage,
   width,
   isDetail = false,
   hasBottom = true,
@@ -41,15 +43,32 @@ const MultipleSelect = ({
         leaveTo="opacity-0 translate-y-1"
       >
         <Popover.Panel
-          className={`absolute bg-white shadow-lg p-5 w-full z-10 ${
+          className={`absolute bg-white  shadow-lg p-5 w-full z-10 ${
             isDetail && (hasBottom ? '-top-[19em]' : '-top-[21em]')
           }`}
         >
-          <label className="cursor-pointer label justify-start">
+          <label
+            className="cursor-pointer label justify-start"
+            onClick={() => {
+              if (
+                selectedList.findIndex((selected) => selected === 'All') >= 0
+              ) {
+                filter('All', true);
+              } else {
+                filter('All', false);
+              }
+
+              setPage(1);
+            }}
+          >
             <input
               type="checkbox"
               className="checkbox checkbox-primary"
-              value="all"
+              value="All"
+              checked={
+                selectedList.findIndex((selected) => selected === 'All') >= 0 ||
+                selectedList.length === 0
+              }
             />
             <span className="label-text capitalize pl-3">All</span>
           </label>
@@ -63,8 +82,28 @@ const MultipleSelect = ({
                   type="checkbox"
                   className="checkbox checkbox-primary"
                   value={item}
+                  checked={
+                    selectedList.findIndex(
+                      (selected) => selected === item.name
+                    ) >= 0 || selectedList.length === 0
+                  }
                 />
-                <span className="label-text capitalize overflow-hidden text-ellipsis pl-3">
+                <span
+                  className="label-text capitalize overflow-hidden text-ellipsis pl-3"
+                  onClick={() => {
+                    if (
+                      selectedList.findIndex(
+                        (selected) => selected === item.name
+                      ) >= 0
+                    ) {
+                      filter(item.name, true);
+                    } else {
+                      filter(item.name, false);
+                    }
+
+                    setPage(1);
+                  }}
+                >
                   {item.label}
                 </span>
               </label>
