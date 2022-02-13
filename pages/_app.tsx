@@ -3,8 +3,7 @@ import { Provider } from 'react-redux';
 import '@shared/styles/global.css';
 import '@shared/styles/nprocess.css';
 import '@shared/styles/loader.css';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
+import '@shared/styles/calendar.css';
 import { store } from '@redux/store/store';
 import { QueryClient, QueryClientProvider } from 'react-query';
 

@@ -7,7 +7,7 @@ export interface ProjectStatus {
 export const projectStatusList: ProjectStatus[] = [
   { code: 0, label: 'Waiting', name: 'Waiting' },
   { code: 1, label: 'Pending', name: 'Pending' },
-  { code: 2, label: 'In-progress', name: 'Progress' },
+  { code: 2, label: 'In-progress', name: 'Process' },
   { code: 3, label: 'Done', name: 'Done' },
   { code: 4, label: 'Deleted', name: 'Delete' },
   { code: 5, label: 'Denied', name: 'Deny' },

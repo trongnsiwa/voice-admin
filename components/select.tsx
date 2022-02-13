@@ -1,36 +1,38 @@
 import { Popover, Transition } from '@headlessui/react';
 import { Dispatch, Fragment, ReactElement, SetStateAction } from 'react';
 
-interface MultipleSelectProps {
+interface SelectProps {
   icon: ReactElement;
   name: string;
   data: any[];
-  selectedList: string[];
-  filter: (value: string, isClear: boolean) => void;
-  setPage: Dispatch<SetStateAction<number>>;
   width: any;
+  setPage: Dispatch<SetStateAction<number>>;
+  filter: (name: string, value: string | null) => void;
+  selected: any;
   isDetail?: boolean;
   hasBottom?: boolean;
 }
 
-const MultipleSelect = ({
+const Select = ({
   icon,
   name,
   data,
-  selectedList,
-  filter,
-  setPage,
   width,
+  setPage,
+  filter,
+  selected,
   isDetail = false,
   hasBottom = true,
-}: MultipleSelectProps) => {
+}: SelectProps) => {
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
       <Popover.Button
         className={`pl-12 select select-ghost bg-white select-bordered cursor-default disabled caret-transparent ${width}`}
       >
-        <span className="my-auto text-gray-600 font-medium">{name}</span>
+        <span className="my-auto text-gray-600 font-medium">
+          {selected ?? name}
+        </span>
       </Popover.Button>
 
       <Transition
@@ -47,26 +49,30 @@ const MultipleSelect = ({
             isDetail && (hasBottom ? '-top-[19em]' : '-top-[21em]')
           }`}
         >
-          <label className="cursor-pointer label justify-start">
+          <label
+            className="cursor-pointer label justify-start"
+            onClick={() => {
+              filter('Status', null);
+
+              setPage(1);
+            }}
+          >
             <input
-              type="checkbox"
-              className="checkbox checkbox-primary"
+              type="radio"
+              name={`rb-${name}`}
+              className="radio focus:text-primary-dark"
               value="All"
-              checked={
-                selectedList.findIndex((selected) => selected === 'All') >= 0 ||
-                selectedList.length === 0
-              }
+              checked={selected === null}
+              onChange={() => {
+                filter('Status', null);
+
+                setPage(1);
+              }}
             />
             <span
               className="label-text capitalize pl-3"
               onClick={() => {
-                if (
-                  selectedList.findIndex((selected) => selected === 'All') >= 0
-                ) {
-                  filter('All', true);
-                } else {
-                  filter('All', false);
-                }
+                filter('Status', null);
 
                 setPage(1);
               }}
@@ -81,27 +87,21 @@ const MultipleSelect = ({
                 className="cursor-pointer label justify-start"
               >
                 <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary"
-                  value={item}
-                  checked={
-                    selectedList.findIndex(
-                      (selected) => selected === item.name
-                    ) >= 0 || selectedList.length === 0
-                  }
+                  type="radio"
+                  name={`rb-${name}`}
+                  className="radio"
+                  value={item.name}
+                  checked={selected === item.name}
+                  onChange={() => {
+                    filter('Status', item.name);
+
+                    setPage(1);
+                  }}
                 />
                 <span
                   className="label-text capitalize overflow-hidden text-ellipsis pl-3"
                   onClick={() => {
-                    if (
-                      selectedList.findIndex(
-                        (selected) => selected === item.name
-                      ) >= 0
-                    ) {
-                      filter(item.name, true);
-                    } else {
-                      filter(item.name, false);
-                    }
+                    filter('Status', item.name);
 
                     setPage(1);
                   }}
@@ -116,4 +116,4 @@ const MultipleSelect = ({
   );
 };
 
-export default MultipleSelect;
+export default Select;

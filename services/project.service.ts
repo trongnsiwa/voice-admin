@@ -1,15 +1,19 @@
 import { get, getWithParams, put } from '@shared/libs/http-helper';
 const API_URL = '/projects';
 
+export interface ProjectFilterObject {
+  Status: string | null;
+  PriceMin: string | null;
+  PriceMax: string | null;
+  CreateDate: string | null;
+}
+
 export const getProjects = (
   pageNumber: number,
   pageSize: number,
   searchString: string,
   sort: any,
-  createdStartDate: string | null,
-  createdEndDate: string | null,
-  filterStatusList: string[],
-  filterAgeList: string[]
+  filter: ProjectFilterObject
 ) => {
   return get(
     `${API_URL}?pageNumber=${pageNumber}&pageSize=${pageSize}${
@@ -21,12 +25,20 @@ export const getProjects = (
         ? '&sort[CreateDate]=' + sort.CreateDate
         : ''
     }${sort && sort.Status != null ? '&sort[Email]=' + sort.Status : ''}${
-      filterStatusList.length > 0
-        ? filterStatusList.map((status) => '&filter[Status]=' + status).join('')
+      filter.PriceMin != null && filter.PriceMin !== ''
+        ? '&filter[PriceMin]=' + filter.PriceMin
         : ''
     }${
-      filterAgeList.length > 0
-        ? filterAgeList.map((age) => '&filter[Age]=' + age).join('')
+      filter.Status != null && filter.Status !== ''
+        ? '&filter[Status]=' + filter.Status
+        : ''
+    }${
+      filter.PriceMax != null && filter.PriceMax !== ''
+        ? '&filter[PriceMax]=' + filter.PriceMax
+        : ''
+    }${
+      filter.CreateDate != null && filter.CreateDate !== ''
+        ? '&filter[CreateDate]=' + filter.CreateDate
         : ''
     }`
   );
