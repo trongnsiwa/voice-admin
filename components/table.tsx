@@ -21,6 +21,7 @@ interface TableProps {
   setQueryPageSize: Dispatch<SetStateAction<number>>;
   setSortObj: Dispatch<SetStateAction<any>>;
   isLoading: boolean;
+  filterObj: any;
 }
 
 const Table = ({
@@ -39,6 +40,7 @@ const Table = ({
   setQueryPageSize,
   setSortObj,
   isLoading = false,
+  filterObj,
 }: TableProps) => {
   const { open } = useAppSelector((state) => state.sidebar);
 
@@ -80,6 +82,10 @@ const Table = ({
     setQueryPageSize(pageSize);
     gotoPage(0);
   }, [pageSize]);
+
+  useEffect(() => {
+    gotoPage(0);
+  }, [filterObj]);
 
   const paginationButtons = (
     <div>

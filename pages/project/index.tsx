@@ -26,6 +26,8 @@ import { DayValue } from '@hassanmojab/react-modern-calendar-datepicker';
 import Select from '@components/select';
 import DatePicker from '@components/date-picker';
 import Input from '@components/input';
+import { AiFillFilter } from 'react-icons/ai';
+import { parseInt } from 'lodash';
 
 const Project = () => {
   // filter
@@ -36,6 +38,15 @@ const Project = () => {
     CreateDate: null,
   });
   const [selectedCreatedDate, setSelectedCreatedDate] = useState<DayValue>();
+  const [selectedPrice, setSelectedPrice] = useState<{
+    error: boolean;
+    PriceMin: string | null;
+    PriceMax: string | null;
+  }>({
+    error: false,
+    PriceMin: null,
+    PriceMax: null,
+  });
 
   // sort
   const [sortObj, setSortObj] = useState<any>(null);
@@ -47,7 +58,14 @@ const Project = () => {
   const [totalResults, setTotalResults] = useState(0);
 
   const { isLoading, error, data, isSuccess, isFetching } = useQuery(
-    ['fetchProjects', pageNumber, pageSize, searchBy, sortObj],
+    [
+      'fetchProjects',
+      pageNumber,
+      pageSize,
+      searchBy.trim(),
+      filterObj,
+      sortObj,
+    ],
     () => {
       let dateCreated = null;
       if (filterObj.CreateDate != null) {
@@ -73,10 +91,15 @@ const Project = () => {
   useEffect(() => {
     if (data && !error) {
       setTotalResults(data.data.totalRow);
+      console.log(data.data.data);
     } else {
       setTotalResults(0);
     }
   }, [data, error]);
+
+  useEffect(() => {
+    setPageNumber(1);
+  }, [filterObj]);
 
   const filter = (name: string, value: string | null) => {
     switch (name) {
@@ -87,6 +110,8 @@ const Project = () => {
         });
         break;
     }
+
+    setPageNumber(1);
   };
 
   // table
@@ -147,7 +172,7 @@ const Project = () => {
             {
               'bg-violet-100 text-violet-700 border-none': value === 'Waiting',
               'badge-warning': value === 'Pending',
-              'badge-success': value === 'Done',
+              'bg-green-100 text-green-700 border-none': value === 'Done',
               'badge-error': value === 'Delete' || value === 'Deny',
               'badge-info': value === 'Process',
             },
@@ -187,7 +212,7 @@ const Project = () => {
           </div>
           <div className="w-full inline-flex gap-3 pb-5">
             {/* search */}
-            <SearchBar setValue={setSearchBy} />
+            <SearchBar setValue={setSearchBy} setPage={setPageNumber} />
             {/* actions */}
             {/* create date */}
             <DatePicker
@@ -206,6 +231,7 @@ const Project = () => {
                       ).toUTCString()
                     : null,
                 });
+                setPageNumber(1);
               }}
               reset={() => {
                 setSelectedCreatedDate(null);
@@ -221,8 +247,8 @@ const Project = () => {
               name="Status"
               data={projectStatusList}
               selected={filterObj.Status}
-              setPage={setPageNumber}
               filter={filter}
+              filterName="Status"
               width={'w-[13em]'}
             />
             <div className="border-l border-gray-300"></div>
@@ -230,29 +256,88 @@ const Project = () => {
             <Input
               type="number"
               placeholder="Min Price"
-              value={filterObj.PriceMin}
-              onChange={(e) =>
-                setFilterObj({
-                  ...filterObj,
-                  PriceMin: e.target.value,
-                })
-              }
+              value={selectedPrice.PriceMin}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+
+                if (
+                  value < 0 ||
+                  (selectedPrice.PriceMax &&
+                    value > parseInt(selectedPrice.PriceMax))
+                ) {
+                  setSelectedPrice({
+                    ...selectedPrice,
+                    error: true,
+                  });
+                }
+
+                setSelectedPrice({
+                  ...selectedPrice,
+                  PriceMin: value.toString(),
+                });
+              }}
               icon={<MdOutlinePriceChange className="w-6 h-6 text-gray-500" />}
               width={'w-[10rem]'}
             />
             <Input
               type="number"
               placeholder="Max Price"
-              value={filterObj.PriceMax}
-              onChange={(e) =>
-                setFilterObj({
-                  ...filterObj,
-                  PriceMax: e.target.value,
-                })
-              }
+              value={selectedPrice.PriceMax}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+
+                if (
+                  value < 0 ||
+                  (selectedPrice.PriceMin &&
+                    value < parseInt(selectedPrice.PriceMin))
+                ) {
+                  setSelectedPrice({
+                    ...selectedPrice,
+                    error: true,
+                  });
+                }
+
+                setSelectedPrice({
+                  ...selectedPrice,
+                  PriceMax: value.toString(),
+                });
+
+                console.log(typeof value);
+                console.log(selectedPrice.error);
+              }}
               icon={<MdPriceChange className="w-6 h-6 text-gray-500" />}
               width={'w-[10rem]'}
             />
+            <button
+              type="button"
+              className="btn btn-primary btn-outline border-gray-300"
+              onClick={() => {
+                setFilterObj({
+                  ...filterObj,
+                  PriceMin: selectedPrice.PriceMin,
+                  PriceMax: selectedPrice.PriceMax,
+                });
+                setSelectedPrice({
+                  ...selectedPrice,
+                  error: false,
+                });
+                setPageNumber(1);
+              }}
+              disabled={
+                selectedPrice.error ||
+                (selectedPrice.PriceMin
+                  ? parseInt(selectedPrice.PriceMin) === 0
+                  : undefined) ||
+                (selectedPrice.PriceMax
+                  ? parseInt(selectedPrice.PriceMax) === 0
+                  : undefined)
+              }
+            >
+              <AiFillFilter size="20" />
+            </button>
+            {selectedPrice.error && (
+              <p className="text-error text-sm">Invalid price</p>
+            )}
           </div>
         </div>
 
@@ -269,6 +354,7 @@ const Project = () => {
             setQueryPageSize={setPageSize}
             setSortObj={setSortObj}
             isLoading={isLoading || isFetching}
+            filterObj={filterObj}
           />
         </div>
       </div>

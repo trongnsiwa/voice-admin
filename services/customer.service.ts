@@ -15,7 +15,7 @@ export const getCustomers = (
   filter: CustomerFilterObject
 ) => {
   return get(
-    `${API_URL}?pageNumber=${pageNumber}&pageSize=${pageSize}${
+    `${API_URL}/search?pageNumber=${pageNumber}&pageSize=${pageSize}${
       searchString !== '' ? '&searchString=' + searchString : ''
     }${sort && sort.Name != null ? '&sort[Name]=' + sort.Name : ''}${
       sort && sort.Email != null ? '&sort[Email]=' + sort.Email : ''

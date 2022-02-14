@@ -1,23 +1,14 @@
-export interface Gender {
-  id: string;
-  name: string;
-}
-
 export const genderList = <GenderType[]>[
   {
-    id: '0',
+    name: 'Men',
     label: 'Men',
   },
   {
-    id: '1',
+    name: 'Women',
     label: 'Women',
   },
   {
-    id: '2',
+    name: 'Other',
     label: 'Other',
   },
 ];
-
-export const getGenderById = (id: string) => {
-  return genderList.find((gender) => gender.id === id)?.label;
-};

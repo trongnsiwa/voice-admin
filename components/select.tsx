@@ -1,13 +1,13 @@
 import { Popover, Transition } from '@headlessui/react';
-import { Dispatch, Fragment, ReactElement, SetStateAction } from 'react';
+import { Fragment, ReactElement } from 'react';
 
 interface SelectProps {
   icon: ReactElement;
   name: string;
   data: any[];
   width: any;
-  setPage: Dispatch<SetStateAction<number>>;
   filter: (name: string, value: string | null) => void;
+  filterName: string;
   selected: any;
   isDetail?: boolean;
   hasBottom?: boolean;
@@ -18,8 +18,8 @@ const Select = ({
   name,
   data,
   width,
-  setPage,
   filter,
+  filterName,
   selected,
   isDetail = false,
   hasBottom = true,
@@ -52,9 +52,7 @@ const Select = ({
           <label
             className="cursor-pointer label justify-start"
             onClick={() => {
-              filter('Status', null);
-
-              setPage(1);
+              filter(filterName, null);
             }}
           >
             <input
@@ -65,16 +63,12 @@ const Select = ({
               checked={selected === null}
               onChange={() => {
                 filter('Status', null);
-
-                setPage(1);
               }}
             />
             <span
               className="label-text capitalize pl-3"
               onClick={() => {
-                filter('Status', null);
-
-                setPage(1);
+                filter(filterName, null);
               }}
             >
               All
@@ -93,17 +87,13 @@ const Select = ({
                   value={item.name}
                   checked={selected === item.name}
                   onChange={() => {
-                    filter('Status', item.name);
-
-                    setPage(1);
+                    filter(filterName, item.name);
                   }}
                 />
                 <span
                   className="label-text capitalize overflow-hidden text-ellipsis pl-3"
                   onClick={() => {
-                    filter('Status', item.name);
-
-                    setPage(1);
+                    filter(filterName, item.name);
                   }}
                 >
                   {item.label}

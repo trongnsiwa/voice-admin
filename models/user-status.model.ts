@@ -9,7 +9,7 @@ export const userStatusList = <UserStatus[]>[
   {
     code: '0',
     label: 'Active',
-    name: 'Active',
+    name: 'Activated',
     color: 'success',
   },
   {

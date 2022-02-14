@@ -19,18 +19,7 @@ type RatingType = {
   label: string;
 };
 
-type AgeType = {
-  name: string;
-  label: string;
-};
-
-type PriceType = {
-  startPrice: number;
-  endPrice: number;
-  label: string;
-};
-
 type GenderType = {
-  id: string;
+  name: string;
   label: string;
 };

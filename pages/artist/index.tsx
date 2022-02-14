@@ -2,14 +2,25 @@ import Layout from '@components/layouts/layout';
 import Modal from '@components/modal';
 import MultipleSelect from '@components/multiple-select';
 import SearchBar from '@components/search-bar';
+import Select from '@components/select';
 import Table from '@components/table';
+import { hideLoader, showLoader } from '@redux/actions';
+import { useAppDispatch } from '@redux/store/hooks';
+import {
+  ArtistFilterObject,
+  changeStatusOfArtist,
+  getArtists,
+} from '@services/artist.service';
+import { getAllCountries, getAllVoiceStyles } from '@services/system.service';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { Artist, artists, ratingList } from 'models/artist.model';
+import { Country } from 'models/country.model';
 import { genderList } from 'models/gender.model';
 import { getStatusByName, userStatusList } from 'models/user-status.model';
+import { VoiceStyle } from 'models/voice-style.model';
 import Link from 'next/link';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BiUserVoice } from 'react-icons/bi';
 import { BsGenderAmbiguous, BsStar, BsTags } from 'react-icons/bs';
 import { GoHome } from 'react-icons/go';
@@ -18,16 +29,12 @@ import {
   HiOutlineCheckCircle,
   HiOutlinePencilAlt,
 } from 'react-icons/hi';
+import { useQuery } from 'react-query';
 import { Column } from 'react-table';
 import { useOnClickOutside } from 'usehooks-ts';
 
 const Artist = () => {
-  // data
-  const [data, setData] = useState<Artist[]>(artists);
-  const [pageIndex, setPageIndex] = useState(1);
-  const pageSize = 30;
-
-  const [totalResults, setTotalResults] = useState(0);
+  const dispatch = useAppDispatch();
 
   // modal
   const [banModal, updateBanModal] = useState<BanModalType>({
@@ -36,116 +43,120 @@ const Artist = () => {
     status: null,
   });
 
-  // const [filterObj, setFilterObj] = useState<ArtistFilterObject>({
-  //   Status: null,
-  //   Gender: null,
-  // });
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [styles, setStyles] = useState<VoiceStyle[]>([]);
+
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
+
+  const [filterObj, setFilterObj] = useState<ArtistFilterObject>({
+    Status: null,
+    Gender: null,
+  });
 
   const [sortObj, setSortObj] = useState<any>(null);
 
   // search
   const [searchBy, setSearchBy] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalResults, setTotalResults] = useState(0);
 
-  //  const loadData = () => {
-  //    getArtists(
-  //      page,
-  //      resultsPerPage,
-  //      searchBy,
-  //      sortObj,
-  //      filterObj,
-  //      selectedCountries,
-  //      selectedStyles
-  //    )
-  //      .then((res) => {
-  //        if (res.data) {
-  //          setData(res.data.data);
-  //          setTotalResults(res.data.totalRow);
-  //        } else {
-  //          setData([]);
-  //          setTotalResults(0);
-  //        }
-  //      })
-  //      .catch((err) => {
-  //        setData([]);
-  //        setTotalResults(0);
-  //      });
-  //  };
+  const { isLoading, error, data, isSuccess, isFetching, refetch } = useQuery(
+    ['fetchProjects', pageNumber, pageSize, searchBy, filterObj, sortObj],
+    () =>
+      getArtists(
+        pageNumber,
+        pageSize,
+        searchBy.trim(),
+        sortObj,
+        filterObj,
+        selectedCountries,
+        selectedStyles
+      ),
+    {
+      keepPreviousData: true,
+      staleTime: Infinity,
+    }
+  );
 
-  //  useEffect(() => {
-  //    // setData(artists.slice((page - 1) * resultsPerPage, page * resultsPerPage));
+  useEffect(() => {
+    if (data && !error) {
+      setTotalResults(data.data.totalRow);
+      console.log(data.data.data);
+    } else {
+      setTotalResults(0);
+    }
+  }, [data, error]);
 
-  //    loadData();
-  //    // eslint-disable-next-line react-hooks/exhaustive-deps
-  //  }, [page, filterObj, sortObj, searchBy, selectedCountries, selectedStyles]);
+  useEffect(() => {
+    getAllCountries().then((res) => {
+      setCountries(res.data.data);
+    });
+  }, []);
 
-  //  useEffect(() => {
-  //    getAllCountries().then((res) => {
-  //      setCountries(res.data.data);
-  //    });
-  //  }, []);
+  useEffect(() => {
+    getAllVoiceStyles().then((res) => {
+      setStyles(res.data.data);
+    });
+  }, []);
 
-  //  useEffect(() => {
-  //    getAllVoiceStyles().then((res) => {
-  //      setStyles(res.data.data);
-  //    });
-  //  }, []);
+  const filterCountries = (value: string, isClear: boolean) => {
+    let search: string[] = [];
 
-  // const filterCountries = (value: string, isClear: boolean) => {
-  //   let search: string[] = [];
+    if (isClear) {
+      search = selectedCountries.filter((country) => country !== value);
+    } else {
+      search = [...selectedCountries, value];
+    }
 
-  //   if (isClear) {
-  //     search = selectedCountries.filter((country) => country !== value);
-  //   } else {
-  //     search = [...selectedCountries, value];
-  //   }
+    console.log(search);
+    setSelectedCountries(search);
+  };
 
-  //   console.log(search);
-  //   setSelectedCountries(search);
-  // };
+  const filterStyles = (value: string, isClear: boolean) => {
+    let search: string[] = [];
 
-  // const filterStyles = (value: string, isClear: boolean) => {
-  //   let search: string[] = [];
+    if (isClear) {
+      search = selectedStyles.filter((style) => style !== value);
+    } else {
+      search = [...selectedStyles, value];
+    }
 
-  //   if (isClear) {
-  //     search = selectedStyles.filter((style) => style !== value);
-  //   } else {
-  //     search = [...selectedStyles, value];
-  //   }
+    setSelectedStyles(search);
+  };
 
-  //   setSelectedStyles(search);
-  // };
+  const banUser = () => {
+    if (banModal.selected == null || banModal.status == null) {
+      return;
+    }
 
-  //  const banUser = () => {
-  //    if (openBanModal.selected == null || openBanModal.status == null) {
-  //      return;
-  //    }
+    dispatch(showLoader());
 
-  //    dispatch(showLoader());
+    const changedStatus = banModal.status === 'Activated' ? 1 : 0;
+    console.log(changedStatus);
 
-  //    const changedStatus = openBanModal.status === 'Activated' ? 1 : 0;
-  //    console.log(changedStatus);
-
-  //    changeStatusOfArtist(openBanModal.selected, changedStatus)
-  //      .then((res) => {
-  //        dispatch(hideLoader());
-  //        NotificationManager.success(
-  //          openBanModal.status === 'Activated'
-  //            ? SUCCESS.BAN_USER_SUCCESS
-  //            : SUCCESS.UNBAN_USER_SUCCESS,
-  //          'Thành công',
-  //          1000
-  //        );
-  //        setOpenBanModal({
-  //          open: false,
-  //          selected: null,
-  //          status: null,
-  //        });
-  //        loadData();
-  //      })
-  //      .catch((err) => {
-  //        showStoreErrorMessage(err, dispatch);
-  //      });
-  //  };
+    changeStatusOfArtist(banModal.selected, changedStatus)
+      .then((res) => {
+        dispatch(hideLoader());
+        //  NotificationManager.success(
+        //    openBanModal.status === 'Activated'
+        //      ? SUCCESS.BAN_USER_SUCCESS
+        //      : SUCCESS.UNBAN_USER_SUCCESS,
+        //    'Thành công',
+        //    1000
+        //  );
+        updateBanModal({
+          open: false,
+          selected: null,
+          status: null,
+        });
+        refetch();
+      })
+      .catch((err) => {
+        //  showStoreErrorMessage(err, dispatch);
+      });
+  };
 
   const columns = useMemo<Column[]>(
     () => [
@@ -170,11 +181,6 @@ const Artist = () => {
             </div>
           );
         },
-      },
-      {
-        Header: 'Username',
-        accessor: 'username',
-        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
       },
       {
         Header: 'Rating',
@@ -235,35 +241,13 @@ const Artist = () => {
         Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
       },
       {
-        Header: 'Created',
-        accessor: 'createdDate',
-        Cell: ({ cell: { value } }) => (
-          <span className="text-sm">
-            {dayjs(new Date(value as Date).toLocaleDateString()).format(
-              'DD/MM/YYYY'
-            )}
-          </span>
-        ),
-      },
-      {
-        Header: 'Updated',
-        accessor: 'updatedDate',
-        Cell: ({ cell: { value } }) => (
-          <span className="text-sm">
-            {dayjs(new Date(value as Date).toLocaleDateString()).format(
-              'DD/MM/YYYY'
-            )}
-          </span>
-        ),
-      },
-      {
         Header: 'Status',
         accessor: 'status',
         Cell: ({ cell: { value } }) => {
           const className = classNames(
             'badge',
             {
-              'badge-success bg-success text-success-dark': value === 'Active',
+              'bg-green-100 text-green-700 border-none': value === 'Activated',
               'badge-error': value === 'Banned',
             },
             'text-sm p-3'
@@ -333,6 +317,25 @@ const Artist = () => {
     []
   );
 
+  const filter = (name: string, value: string | null) => {
+    switch (name) {
+      case 'Status':
+        setFilterObj({
+          ...filterObj,
+          Status: value,
+        });
+        break;
+      case 'Gender':
+        setFilterObj({
+          ...filterObj,
+          Gender: value,
+        });
+        break;
+    }
+
+    setPageNumber(1);
+  };
+
   const closeBanModal = () => {
     updateBanModal({
       ...banModal,
@@ -349,58 +352,65 @@ const Artist = () => {
           </div>
           <div className="w-full inline-flex gap-3 pb-5">
             {/* search */}
-            <SearchBar setValue={setSearchBy} />
+            <SearchBar setValue={setSearchBy} setPage={setPageNumber} />
             {/* status */}
-            <MultipleSelect
+            <Select
               icon={<BsTags className="w-6 h-6 text-gray-500" />}
               name="Status"
               data={userStatusList}
-              value={null}
-              onChange={null}
+              selected={filterObj.Status}
+              filter={filter}
+              filterName="Status"
               width={'w-[13em]'}
             />
             {/* gender */}
-            <MultipleSelect
+            <Select
               icon={<BsGenderAmbiguous className="w-6 h-6 text-gray-500" />}
               name="Gender"
               data={genderList}
-              value={null}
-              onChange={null}
+              selected={filterObj.Gender}
+              filter={filter}
+              filterName="Gender"
               width={'w-[13em]'}
             />
             {/* country */}
             <MultipleSelect
               icon={<GoHome className="w-6 h-6 text-gray-500" />}
               name="Country"
-              data={[]}
-              value={null}
-              onChange={null}
+              data={countries}
               width={'w-[13em]'}
+              filter={filterCountries}
+              selectedList={selectedCountries}
+              setPage={setPageNumber}
             />
             {/* voice style */}
             <MultipleSelect
               icon={<BiUserVoice className="w-6 h-6 text-gray-500" />}
               name="Voice Style"
-              data={[]}
-              value={null}
-              onChange={null}
+              data={styles}
               width={'w-[13em]'}
-            />
-            {/* rating */}
-            <MultipleSelect
-              icon={<BsStar className="w-6 h-6 text-gray-500" />}
-              name="Rating"
-              data={ratingList}
-              value={null}
-              onChange={null}
-              width={'w-[13em]'}
+              filter={filterStyles}
+              selectedList={selectedStyles}
+              setPage={setPageNumber}
             />
           </div>
         </div>
 
         <div className="border-t-2 border-gray-100">
           {/* table */}
-          <Table columns={columns} data={data} total={totalResults} />
+          <Table
+            columns={columns}
+            data={data?.data.data}
+            total={totalResults}
+            isSuccess={isSuccess}
+            queryPageIndex={pageNumber - 1}
+            setQueryPageIndex={setPageNumber}
+            queryPageSize={pageSize}
+            setQueryPageSize={setPageSize}
+            setSortObj={setSortObj}
+            isLoading={isLoading || isFetching}
+            filterObj={filterObj}
+          />
         </div>
       </div>
 
@@ -427,7 +437,7 @@ const Artist = () => {
               ? 'bg-red-500 hover:bg-red-600'
               : 'bg-green-500 hover:bg-green-600'
           }`,
-          onClick: closeBanModal,
+          onClick: banUser,
         }}
       />
     </Layout>
