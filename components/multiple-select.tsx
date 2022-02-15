@@ -24,6 +24,8 @@ const MultipleSelect = ({
   isDetail = false,
   hasBottom = true,
 }: MultipleSelectProps) => {
+  console.log(data);
+
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
@@ -52,23 +54,15 @@ const MultipleSelect = ({
               type="checkbox"
               className="checkbox checkbox-primary"
               value="All"
-              checked={
-                selectedList.findIndex((selected) => selected === 'All') >= 0 ||
-                selectedList.length === 0
-              }
+              checked={selectedList.length === 0}
+              onChange={() => {
+                filter('All', true);
+              }}
             />
             <span
               className="label-text capitalize pl-3"
               onClick={() => {
-                if (
-                  selectedList.findIndex((selected) => selected === 'All') >= 0
-                ) {
-                  filter('All', true);
-                } else {
-                  filter('All', false);
-                }
-
-                setPage(1);
+                filter('All', true);
               }}
             >
               All
@@ -102,11 +96,9 @@ const MultipleSelect = ({
                     } else {
                       filter(item.name, false);
                     }
-
-                    setPage(1);
                   }}
                 >
-                  {item.label}
+                  {item.name}
                 </span>
               </label>
             ))}

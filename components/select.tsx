@@ -62,7 +62,7 @@ const Select = ({
               value="All"
               checked={selected === null}
               onChange={() => {
-                filter('Status', null);
+                filter(filterName, null);
               }}
             />
             <span

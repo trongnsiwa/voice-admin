@@ -43,7 +43,6 @@ const Customer = () => {
     Status: null,
     Gender: null,
   });
-  const [sortObj, setSortObj] = useState<any>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalResults, setTotalResults] = useState(0);
@@ -52,9 +51,8 @@ const Customer = () => {
   const [searchBy, setSearchBy] = useState('');
 
   const { isLoading, error, data, isSuccess, isFetching, refetch } = useQuery(
-    ['fetchProjects', pageNumber, pageSize, searchBy, filterObj, sortObj],
-    () =>
-      getCustomers(pageNumber, pageSize, searchBy.trim(), sortObj, filterObj),
+    ['fetchProjects', pageNumber, pageSize, searchBy, filterObj],
+    () => getCustomers(pageNumber, pageSize, searchBy.trim(), filterObj),
     {
       keepPreviousData: true,
       staleTime: Infinity,
@@ -285,7 +283,6 @@ const Customer = () => {
             setQueryPageIndex={setPageNumber}
             queryPageSize={pageSize}
             setQueryPageSize={setPageSize}
-            setSortObj={setSortObj}
             isLoading={isLoading || isFetching}
             filterObj={filterObj}
           />

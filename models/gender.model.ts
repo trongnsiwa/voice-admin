@@ -1,14 +1,14 @@
 export const genderList = <GenderType[]>[
   {
-    name: 'Men',
+    name: 'Nam',
     label: 'Men',
   },
   {
-    name: 'Women',
+    name: 'Nữ',
     label: 'Women',
   },
   {
-    name: 'Other',
+    name: 'Khác',
     label: 'Other',
   },
 ];

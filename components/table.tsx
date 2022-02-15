@@ -1,6 +1,5 @@
-import { usePagination, useTable } from 'react-table';
+import { usePagination, useSortBy, useTable } from 'react-table';
 import { BsSortDown, BsSortUp, BsTags } from 'react-icons/bs';
-import MultipleSelect from './multiple-select';
 import { useAppSelector } from '@redux/store/hooks';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import LoadingSpinner from './loading-spinner';
@@ -19,7 +18,6 @@ interface TableProps {
   setQueryPageIndex: Dispatch<SetStateAction<number>>;
   queryPageSize: number;
   setQueryPageSize: Dispatch<SetStateAction<number>>;
-  setSortObj: Dispatch<SetStateAction<any>>;
   isLoading: boolean;
   filterObj: any;
 }
@@ -38,7 +36,6 @@ const Table = ({
   setQueryPageIndex,
   queryPageSize,
   setQueryPageSize,
-  setSortObj,
   isLoading = false,
   filterObj,
 }: TableProps) => {
@@ -55,6 +52,7 @@ const Table = ({
       manualPagination: true,
       pageCount: isSuccess ? Math.ceil(total / queryPageSize) : 0,
     },
+    useSortBy,
     usePagination
   );
 
@@ -159,7 +157,9 @@ const Table = ({
         <thead>
           <tr>
             {headers.map((column, index) => {
-              const { key, ...restHeaderProps } = column.getHeaderProps();
+              const { key, ...restHeaderProps } = column.getHeaderProps(
+                column.getSortByToggleProps()
+              );
 
               return (
                 <th

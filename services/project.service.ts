@@ -18,16 +18,6 @@ export const getProjects = (
   return get(
     `${API_URL}?pageNumber=${pageNumber}&pageSize=${pageSize}${
       searchString !== '' ? '&&searchString=' + searchString : ''
-    }${sort && sort.Name != null ? '&sort[Name]=' + sort.Name : ''}${
-      sort && sort.Poster != null ? '&sort[Poster]=' + sort.Poster : ''
-    }${sort && sort.Price != null ? '&sort[Price]=' + sort.Price : ''}${
-      sort && sort.CreateDate != null
-        ? '&sort[CreateDate]=' + sort.CreateDate
-        : ''
-    }${sort && sort.Status != null ? '&sort[Email]=' + sort.Status : ''}${
-      filter.PriceMin != null && filter.PriceMin !== ''
-        ? '&filter[PriceMin]=' + filter.PriceMin
-        : ''
     }${
       filter.Status != null && filter.Status !== ''
         ? '&filter[Status]=' + filter.Status

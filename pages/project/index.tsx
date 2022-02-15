@@ -91,7 +91,6 @@ const Project = () => {
   useEffect(() => {
     if (data && !error) {
       setTotalResults(data.data.totalRow);
-      console.log(data.data.data);
     } else {
       setTotalResults(0);
     }
@@ -352,7 +351,6 @@ const Project = () => {
             setQueryPageIndex={setPageNumber}
             queryPageSize={pageSize}
             setQueryPageSize={setPageSize}
-            setSortObj={setSortObj}
             isLoading={isLoading || isFetching}
             filterObj={filterObj}
           />

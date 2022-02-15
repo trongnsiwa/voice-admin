@@ -11,18 +11,13 @@ export const getArtists = (
   pageNumber: number,
   pageSize: number,
   searchString: string,
-  sort: any,
   filter: ArtistFilterObject,
   filterCountryList: string[],
   filterStyleList: string[]
 ) => {
   return get(
     `${API_URL}/search?pageNumber=${pageNumber}&pageSize=${pageSize}${
-      searchString !== '' ? '&&searchString=' + searchString : ''
-    }${sort && sort.Name != null ? '&sort[Name]=' + sort.Name : ''}${
-      sort && sort.Email != null ? '&sort[Email]=' + sort.Email : ''
-    }${sort && sort.Gender != null ? '&sort[Gender]=' + sort.Gender : ''}${
-      sort && sort.Status != null ? '&sort[Email]=' + sort.Status : ''
+      searchString !== '' ? '&searchString=' + searchString : ''
     }${filter.Gender != null ? '&filter[Gender]=' + filter.Gender : ''}${
       filter.Status != null ? '&filter[Status]=' + filter.Status : ''
     }${

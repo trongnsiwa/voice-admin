@@ -31,7 +31,6 @@ import {
 } from 'react-icons/hi';
 import { useQuery } from 'react-query';
 import { Column } from 'react-table';
-import { useOnClickOutside } from 'usehooks-ts';
 
 const Artist = () => {
   const dispatch = useAppDispatch();
@@ -54,8 +53,6 @@ const Artist = () => {
     Gender: null,
   });
 
-  const [sortObj, setSortObj] = useState<any>(null);
-
   // search
   const [searchBy, setSearchBy] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
@@ -63,13 +60,20 @@ const Artist = () => {
   const [totalResults, setTotalResults] = useState(0);
 
   const { isLoading, error, data, isSuccess, isFetching, refetch } = useQuery(
-    ['fetchProjects', pageNumber, pageSize, searchBy, filterObj, sortObj],
+    [
+      'fetchProjects',
+      pageNumber,
+      pageSize,
+      searchBy,
+      filterObj,
+      selectedCountries,
+      selectedStyles,
+    ],
     () =>
       getArtists(
         pageNumber,
         pageSize,
         searchBy.trim(),
-        sortObj,
         filterObj,
         selectedCountries,
         selectedStyles
@@ -83,7 +87,6 @@ const Artist = () => {
   useEffect(() => {
     if (data && !error) {
       setTotalResults(data.data.totalRow);
-      console.log(data.data.data);
     } else {
       setTotalResults(0);
     }
@@ -101,26 +104,33 @@ const Artist = () => {
     });
   }, []);
 
+  useEffect(() => {
+    setPageNumber(1);
+  }, [filterObj, selectedCountries, selectedStyles]);
+
   const filterCountries = (value: string, isClear: boolean) => {
     let search: string[] = [];
 
-    if (isClear) {
-      search = selectedCountries.filter((country) => country !== value);
-    } else {
-      search = [...selectedCountries, value];
+    if (value !== 'All') {
+      if (isClear) {
+        search = selectedCountries.filter((country) => country !== value);
+      } else {
+        search = [...selectedCountries, value];
+      }
     }
 
-    console.log(search);
     setSelectedCountries(search);
   };
 
   const filterStyles = (value: string, isClear: boolean) => {
     let search: string[] = [];
 
-    if (isClear) {
-      search = selectedStyles.filter((style) => style !== value);
-    } else {
-      search = [...selectedStyles, value];
+    if (value !== 'All') {
+      if (isClear) {
+        search = selectedStyles.filter((style) => style !== value);
+      } else {
+        search = [...selectedStyles, value];
+      }
     }
 
     setSelectedStyles(search);
@@ -333,6 +343,8 @@ const Artist = () => {
         break;
     }
 
+    console.log(value);
+
     setPageNumber(1);
   };
 
@@ -388,7 +400,7 @@ const Artist = () => {
               icon={<BiUserVoice className="w-6 h-6 text-gray-500" />}
               name="Voice Style"
               data={styles}
-              width={'w-[13em]'}
+              width={'w-[15em]'}
               filter={filterStyles}
               selectedList={selectedStyles}
               setPage={setPageNumber}
@@ -407,7 +419,6 @@ const Artist = () => {
             setQueryPageIndex={setPageNumber}
             queryPageSize={pageSize}
             setQueryPageSize={setPageSize}
-            setSortObj={setSortObj}
             isLoading={isLoading || isFetching}
             filterObj={filterObj}
           />
