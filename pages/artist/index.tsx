@@ -93,16 +93,20 @@ const Artist = () => {
   }, [data, error]);
 
   useEffect(() => {
-    getAllCountries().then((res) => {
-      setCountries(res.data.data);
-    });
-  }, []);
+    if (countries.length === 0 && !isLoading) {
+      getAllCountries().then((res) => {
+        setCountries(res.data.data);
+      });
+    }
+  }, [isLoading]);
 
   useEffect(() => {
-    getAllVoiceStyles().then((res) => {
-      setStyles(res.data.data);
-    });
-  }, []);
+    if (styles.length === 0 && !isLoading) {
+      getAllVoiceStyles().then((res) => {
+        setStyles(res.data.data);
+      });
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     setPageNumber(1);

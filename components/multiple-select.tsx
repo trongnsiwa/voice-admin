@@ -24,8 +24,6 @@ const MultipleSelect = ({
   isDetail = false,
   hasBottom = true,
 }: MultipleSelectProps) => {
-  console.log(data);
-
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
