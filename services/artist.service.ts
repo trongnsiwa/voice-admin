@@ -35,7 +35,7 @@ export const getArtists = (
 };
 
 export const getArtistDetail = (id: string) => {
-  return get(`${API_URL}/${id}`);
+  return get(`${API_URL}?id=${id}`);
 };
 
 export const changeStatusOfArtist = (id: string, status: number) => {

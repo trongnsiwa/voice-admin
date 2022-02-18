@@ -13,16 +13,15 @@ import {
 } from '@services/artist.service';
 import { getAllCountries, getAllVoiceStyles } from '@services/system.service';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
-import { Artist, artists, ratingList } from 'models/artist.model';
+import { Artist } from 'models/artist.model';
 import { Country } from 'models/country.model';
 import { genderList } from 'models/gender.model';
 import { getStatusByName, userStatusList } from 'models/user-status.model';
 import { VoiceStyle } from 'models/voice-style.model';
 import Link from 'next/link';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BiUserVoice } from 'react-icons/bi';
-import { BsGenderAmbiguous, BsStar, BsTags } from 'react-icons/bs';
+import { BsGenderAmbiguous, BsTags } from 'react-icons/bs';
 import { GoHome } from 'react-icons/go';
 import {
   HiOutlineBan,
