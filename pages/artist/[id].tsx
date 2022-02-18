@@ -35,6 +35,7 @@ import { getProjectsOfArtist } from '@services/project.service';
 import { ArtistDetail } from 'models/artist-detail.model';
 import _ from 'lodash';
 import LoadingSpinner from '@components/loading-spinner';
+import { ProjectInArtist } from 'models/artist-project.model';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const data = params?.id ?? null;
@@ -171,13 +172,35 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
     () => [
       {
         Header: 'Project',
-        accessor: 'name',
+        accessor: 'projectName',
         Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
       },
       {
         Header: 'Customer',
-        accessor: 'customerName',
-        Cell: ({ cell: { value } }) => <span className="text-sm">{value}</span>,
+        name: 'customerFirstName',
+        Cell: ({ cell }) => {
+          const { original } = cell.row;
+          const pa = original as ProjectInArtist;
+          return (
+            <div className="flex flex-row items-center">
+              <div className="avatar hidden mr-3 md:block">
+                <div className="rounded-full w-10 h-10">
+                  <img
+                    src={
+                      !pa.customerAvatar || pa.customerAvatar === ''
+                        ? 'https://vectorified.com/images/unknown-avatar-icon-7.jpg'
+                        : pa.customerAvatar
+                    }
+                    alt="User image"
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="text-sm">{`${pa.customerLastName} ${pa.customerFirstName}`}</p>
+              </div>
+            </div>
+          );
+        },
       },
       {
         Header: 'Invited',
@@ -207,7 +230,7 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
       },
       {
         Header: 'Canceled',
-        accessor: 'cancelDate',
+        accessor: 'canceledDate',
         Cell: ({ cell: { value } }) => (
           <span className="text-sm">
             {value
@@ -269,7 +292,7 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
       },
       {
         Header: 'Action',
-        accessor: 'id',
+        accessor: 'projectId',
         disableSortBy: true,
         disableFilters: true,
         defaultCanSort: false,
@@ -389,7 +412,7 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
           </div>
 
           <div className="fixed bottom-0 w-full bg-white shadow-lg z-20">
-            <nav className="flex flex-col sm:flex-row">
+            <nav className="flex flex-row">
               <button
                 className={`py-4 px-6 flex hover:text-primary-dark  ${
                   activePage === 1
@@ -589,30 +612,27 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
               </div>
             </>
           ) : (
-            <div className="w-full">
-              {isLoading || isFetching ? (
-                <div className="p-10">
-                  <LoadingSpinner />
-                </div>
-              ) : (
-                <Table
-                  columns={columns}
-                  data={data?.data.data}
-                  total={totalResults}
-                  statusList={artistProjectStatus}
-                  isDetail={true}
-                  onStatusChange={undefined}
-                  notFoundMessage="No Projects"
-                  hasBottom={false}
-                  isSuccess={isSuccess}
-                  queryPageIndex={pageNum - 1}
-                  setQueryPageIndex={setPageNum}
-                  queryPageSize={pageSize}
-                  setQueryPageSize={setPageSize}
-                  isLoading={isLoading || isFetching}
-                  filterObj={status}
-                />
-              )}
+            <div className="w-full h-fit mb-5">
+              <Table
+                columns={columns}
+                data={data?.data.data}
+                total={totalResults}
+                statusList={artistProjectStatus}
+                isDetail={true}
+                onStatusChange={(name: string, value: string | null) => {
+                  setStatus(value);
+                }}
+                selectedStatus={status}
+                notFoundMessage="No Projects"
+                hasBottom={true}
+                isSuccess={isSuccess}
+                queryPageIndex={pageNum - 1}
+                setQueryPageIndex={setPageNum}
+                queryPageSize={pageSize}
+                setQueryPageSize={setPageSize}
+                isLoading={isLoading || isFetching}
+                filterObj={status}
+              />
             </div>
           )}
         </>

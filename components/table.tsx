@@ -3,14 +3,16 @@ import { BsSortDown, BsSortUp, BsTags } from 'react-icons/bs';
 import { useAppSelector } from '@redux/store/hooks';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import LoadingSpinner from './loading-spinner';
+import Select from './select';
 
 interface TableProps {
   columns: any;
   data: any;
   total: number;
   isDetail?: boolean;
-  onStatusChange?: React.ChangeEventHandler<HTMLSelectElement> | undefined;
+  onStatusChange?: (name: string, value: string | null) => void;
   statusList?: any[];
+  selectedStatus?: any;
   notFoundMessage?: string;
   hasBottom?: boolean;
   isSuccess: boolean;
@@ -29,6 +31,7 @@ const Table = ({
   isDetail = false,
   onStatusChange,
   statusList,
+  selectedStatus,
   notFoundMessage = 'No Result Found',
   hasBottom = true,
   isSuccess = false,
@@ -256,24 +259,29 @@ const Table = ({
 
       {isDetail && (
         <div
-          className={`bg-gray-50 py-3 fixed ${
-            !open ? 'w-[calc(100%-80px)]' : 'w-[calc(100%-280px)]'
-          } ${hasBottom ? 'bottom-14' : 'bottom-0'}`}
+          className={`bg-gray-50 py-3 fixed w-full hidden md:block ${
+            hasBottom ? 'bottom-14' : 'bottom-0'
+          }`}
         >
-          <div className="px-10 flex items-center justify-between w-full">
+          <div
+            className={`px-10 flex items-center justify-between ${
+              !open ? 'w-[calc(100%-80px)]' : 'w-[calc(100%-280px)]'
+            }`}
+          >
             {paginationButtons}
-            {isDetail && statusList && statusList.length > 0 && (
+            {isDetail && onStatusChange && statusList && statusList.length > 0 && (
               <div>
-                {/* <MultipleSelect
+                <Select
                   icon={<BsTags className="w-6 h-6 text-gray-500" />}
                   name="Status"
                   data={statusList}
-                  value={null}
-                  onChange={onStatusChange}
                   width={'w-[15em]'}
                   isDetail={isDetail}
                   hasBottom={hasBottom}
-                /> */}
+                  filter={onStatusChange}
+                  filterName="Status"
+                  selected={selectedStatus}
+                />
               </div>
             )}
           </div>
