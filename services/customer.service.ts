@@ -23,7 +23,7 @@ export const getCustomers = (
 };
 
 export const getCustomerDetail = (id: string) => {
-  return get(`${API_URL}/${id}`);
+  return get(`${API_URL}?id=${id}`);
 };
 
 export const changeStatusOfCustomer = (id: string, status: number) => {

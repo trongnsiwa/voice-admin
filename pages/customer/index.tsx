@@ -11,13 +11,12 @@ import {
   getCustomers,
 } from '@services/customer.service';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
-import { Customer, customers } from 'models/customer.model';
+import { Customer } from 'models/customer.model';
 import { genderList } from 'models/gender.model';
 import { userStatusList, getStatusByName } from 'models/user-status.model';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BsGenderAmbiguous, BsStar, BsTags } from 'react-icons/bs';
+import { BsGenderAmbiguous, BsTags } from 'react-icons/bs';
 import {
   HiOutlineBan,
   HiOutlineCheckCircle,
@@ -283,8 +282,9 @@ const Customer = () => {
             setQueryPageIndex={setPageNumber}
             queryPageSize={pageSize}
             setQueryPageSize={setPageSize}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             filterObj={filterObj}
+            isFetching={isFetching}
           />
         </div>
       </div>

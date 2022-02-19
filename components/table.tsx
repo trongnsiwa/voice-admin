@@ -44,8 +44,6 @@ const Table = ({
   isFetching = false,
   filterObj,
 }: TableProps) => {
-  const { open } = useAppSelector((state) => state.sidebar);
-
   const tableInstance = useTable(
     {
       columns,
@@ -57,6 +55,8 @@ const Table = ({
       manualPagination: true,
       pageCount: isSuccess ? Math.ceil(total / queryPageSize) : 0,
       disableSortBy: data?.length === 0 || !isSuccess,
+      autoResetHiddenColumns: false,
+      autoResetPage: false,
     },
     useSortBy,
     usePagination

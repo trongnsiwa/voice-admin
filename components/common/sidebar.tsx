@@ -51,7 +51,10 @@ const Sidebar = () => {
                   <li
                     key={`bar_${index}`}
                     className={`mb-2 hover:bg-stone-500 hover:rounded-lg  ${
-                      router.pathname.endsWith(bar.path)
+                      router.asPath.length === 1 ||
+                      (router.asPath.length > 1 &&
+                        router.asPath.startsWith(bar.path) &&
+                        bar.path.length > 1)
                         ? 'text-secondary font-bold bg-stone-500 rounded-lg'
                         : 'text-gray-100'
                     }`}
@@ -93,7 +96,10 @@ const Sidebar = () => {
                   <li
                     key={`bar_${index}`}
                     className={`mb-2 hover:bg-stone-500 hover:rounded-lg  ${
-                      router.pathname.endsWith(bar.path)
+                      router.asPath.length === 1 ||
+                      (router.asPath.length > 1 &&
+                        router.asPath.startsWith(bar.path) &&
+                        bar.path.length > 1)
                         ? 'text-secondary font-bold bg-stone-500 rounded-lg'
                         : 'text-gray-100'
                     }`}

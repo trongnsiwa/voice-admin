@@ -351,7 +351,8 @@ const Project = () => {
             setQueryPageIndex={setPageNumber}
             queryPageSize={pageSize}
             setQueryPageSize={setPageSize}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
+            isFetching={isFetching}
             filterObj={filterObj}
           />
         </div>

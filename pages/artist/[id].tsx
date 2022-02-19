@@ -86,7 +86,7 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
     classNames(
       'badge',
       {
-        'badge-success': value === 'Active',
+        'bg-green-100 text-green-700 border-none': value === 'Activated',
         'badge-error': value === 'Banned',
       },
       'text-sm'
@@ -280,7 +280,7 @@ const ArtistDetail = ({ id }: ArtistDetailProps) => {
                 value === 'InvitePending' || value === 'ResponsePending',
               'badge-warning': value === 'Accept',
               'badge-error': value === 'Deny',
-              'badge-success': value === 'Done',
+              'bg-green-100 text-green-700 border-none': value === 'Done',
             },
             'text-sm p-3'
           );

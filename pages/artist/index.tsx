@@ -422,8 +422,9 @@ const Artist = () => {
             setQueryPageIndex={setPageNumber}
             queryPageSize={pageSize}
             setQueryPageSize={setPageSize}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             filterObj={filterObj}
+            isFetching={isFetching}
           />
         </div>
       </div>
