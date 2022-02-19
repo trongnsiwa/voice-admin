@@ -11,6 +11,7 @@ interface SelectProps {
   selected: any;
   isDetail?: boolean;
   hasBottom?: boolean;
+  disabled?: boolean;
 }
 
 const Select = ({
@@ -23,12 +24,14 @@ const Select = ({
   selected,
   isDetail = false,
   hasBottom = true,
+  disabled = false,
 }: SelectProps) => {
   return (
     <Popover className="relative">
       <span className="absolute top-1/2 -translate-y-1/2 left-3">{icon}</span>
       <Popover.Button
         className={`pl-12 select select-ghost bg-white select-bordered cursor-default disabled caret-transparent ${width}`}
+        disabled={disabled}
       >
         <span className="my-auto text-gray-600 font-medium">
           {selected ?? name}

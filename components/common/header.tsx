@@ -67,8 +67,11 @@ const Header = () => {
             </button>
           </div>
           <div className="flex-none relative border-l h-7">
-            <p className={`px-3 text-sm font-semibold text-voice-ylw_dark`}>
-              {user?.firstName} {user?.lastName}
+            <p
+              className={`px-3 text-sm font-semibold text-primary-dark`}
+              suppressHydrationWarning
+            >
+              {user ? `${user.lastName} ${user.firstName}` : ''}
             </p>
             <div
               className="avatar cursor-pointer"
@@ -76,10 +79,14 @@ const Header = () => {
               ref={menuRef}
             >
               <div className="rounded-full w-10 h-10 m-1">
-                <img
-                  src="https://ik.imagekit.io/tnyyngwxvx9/default_28FGC8ZwZ.png"
-                  alt=""
-                />
+                {user && user.avatar && user.avatar !== '' ? (
+                  <img src={user.avatar} alt="" />
+                ) : (
+                  <img
+                    src="https://vectorified.com/images/unknown-avatar-icon-7.jpg"
+                    alt=""
+                  />
+                )}
               </div>
             </div>
             <motion.ul

@@ -1,4 +1,3 @@
-import Header from '@components/common/header';
 import Sidebar from '@components/common/sidebar';
 import { authSelector } from '@redux/selectors';
 import { useAppSelector } from '@redux/store/hooks';
@@ -6,6 +5,10 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
+
+const Header = dynamic(() => import('@components/common/header'), {
+  ssr: false,
+});
 
 const TopProgressBar = dynamic(
   () => {

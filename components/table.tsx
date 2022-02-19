@@ -21,6 +21,7 @@ interface TableProps {
   queryPageSize: number;
   setQueryPageSize: Dispatch<SetStateAction<number>>;
   isLoading: boolean;
+  isFetching: boolean;
   filterObj: any;
 }
 
@@ -40,6 +41,7 @@ const Table = ({
   queryPageSize,
   setQueryPageSize,
   isLoading = false,
+  isFetching = false,
   filterObj,
 }: TableProps) => {
   const { open } = useAppSelector((state) => state.sidebar);
@@ -54,6 +56,7 @@ const Table = ({
       },
       manualPagination: true,
       pageCount: isSuccess ? Math.ceil(total / queryPageSize) : 0,
+      disableSortBy: data?.length === 0 || !isSuccess,
     },
     useSortBy,
     usePagination
@@ -126,7 +129,7 @@ const Table = ({
     <div className="overflow-x-auto">
       <div className="w-full flex items-center justify-between py-3 px-10">
         <span>
-          {!isLoading
+          {!isLoading && !isFetching
             ? `Showing ${pageSize * pageIndex + 1} - 
           ${
             total < pageSize * pageIndex + pageSize
@@ -142,6 +145,7 @@ const Table = ({
             value={pageSize}
             onChange={(e) => setPageSize(Number(e.target.value))}
             className="select select-bordered text-gray-600"
+            disabled={data?.length === 0 || page.length === 0 || !isSuccess}
           >
             {[10, 25, 50].map((pageSize) => (
               <option key={`size_${pageSize}`} value={pageSize}>
@@ -160,13 +164,12 @@ const Table = ({
         <thead>
           <tr>
             {headers.map((column, index) => {
-              const { key, ...restHeaderProps } = column.getHeaderProps(
-                column.getSortByToggleProps()
-              );
+              const { key: keyColumn, ...restHeaderProps } =
+                column.getHeaderProps(column.getSortByToggleProps());
 
               return (
                 <th
-                  key={`header_${key}`}
+                  key={`header_${keyColumn}`}
                   {...restHeaderProps}
                   className="cursor-pointer px-10"
                   title={
@@ -198,7 +201,7 @@ const Table = ({
           </tr>
         </thead>
         <tbody key={'body'} {...getTableBodyProps()}>
-          {isLoading ? (
+          {isLoading || isFetching ? (
             <tr>
               <td colSpan={headers.length} className="p-10">
                 <LoadingSpinner />
@@ -208,26 +211,29 @@ const Table = ({
             page.map((row) => {
               prepareRow(row);
 
-              const { key, ...restRowProps } = row.getRowProps();
+              const { key: keyRow, ...restRowProps } = row.getRowProps();
 
               return (
-                <>
-                  <tr key={`row_${key}`} {...restRowProps} className="border-b">
-                    {row.cells.map((cell) => {
-                      const { key, ...restCellProps } = cell.getCellProps();
+                <tr
+                  key={`row_${keyRow}`}
+                  {...restRowProps}
+                  className="border-b"
+                >
+                  {row.cells.map((cell) => {
+                    const { key: keyCell, ...restCellProps } =
+                      cell.getCellProps();
 
-                      return (
-                        <td
-                          key={`cell_${key}`}
-                          {...restCellProps}
-                          className="px-10"
-                        >
-                          {cell.render('Cell')}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                </>
+                    return (
+                      <td
+                        key={`cell_${keyCell}`}
+                        {...restCellProps}
+                        className="px-10"
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
               );
             })
           ) : (
@@ -281,6 +287,9 @@ const Table = ({
                   filter={onStatusChange}
                   filterName="Status"
                   selected={selectedStatus}
+                  disabled={
+                    data?.length === 0 || page.length === 0 || !isSuccess
+                  }
                 />
               </div>
             )}
